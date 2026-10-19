@@ -1,15 +1,7 @@
 (() => {
 'use strict';
 const $ = id => document.getElementById(id);
-const refs = [
- {source:'能力摘要 · 依据平台现有能力配置整理',quote:'物流大数据与数字化：数据治理、物流大数据平台可研与公共数据产品；物流园区／枢纽规划与运营：园区规划、可研及运营指导。',reason:'政策提出系统集成与数据交换，公司能力覆盖数据治理和园区规划。因此切入点具体到“现状诊断 + 改造路径”，先讨论咨询范围。',next:'建议：带系统与数据现状访谈提纲，找园区运营或信息化负责人。'},
- {source:'历史项目方法片段 · 演示参考',quote:'前期调研先盘点业务流程、系统接口与数据责任人，梳理人工重复录入及跨系统断点；形成问题清单，再确定分期改造范围。',reason:'这一方法把宽泛的“数字化改造”转成可执行的调研。先交付系统清单、数据流转图和问题优先级，帮助客户讨论下一步。',next:'建议调整：首次沟通先收集系统清单与一条典型作业流程，再讨论建设方案。'},
- {source:'核实清单 · 推断与事实分开',quote:'政策方向明确，但示例园区是否存在系统断点、谁有决策权、是否有预算和近期改造计划，都还需要客户确认。',reason:'公司有相关能力，只能说明可能匹配；需要客户反馈支持具体需求。没有依据的金额和周期不进入正式承诺。',next:'建议调整：先安排需求访谈；若近期没有改造安排，则保留线索，暂不新建项目商机。'}
-];
 function bindTabs(buttons,onSelect){buttons.forEach((button,i)=>{button.addEventListener('click',()=>onSelect(i));button.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(event.key))return;event.preventDefault();const n=buttons.length;const next=event.key==='Home'?0:event.key==='End'?n-1:(i+(['ArrowLeft','ArrowUp'].includes(event.key)?-1:1)+n)%n;onSelect(next);buttons[next].focus();});});}
-const refTabs=[...document.querySelectorAll('[data-ref]')];
-function selectRef(i){const item=refs[i];refTabs.forEach((b,j)=>{b.setAttribute('aria-selected',String(j===i));b.tabIndex=j===i?0:-1;});$('reference-panel').setAttribute('aria-labelledby','ref-tab-'+i);const card=document.createElement('div');card.className='reference-card';for(const [tag,text,cls] of [['small',item.source,''],['blockquote',item.quote,''],['p',item.reason,'reason'],['p',item.next,'']]){const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;card.append(n);}$('reference-panel').replaceChildren(card);}
-bindTabs(refTabs,selectRef);selectRef(0);
 let returnFocus=null;
 const dialogs=[...document.querySelectorAll('.study-dialog')];
 function openDialog(key,trigger){const current=dialogs.find(d=>d.open);if(!current)returnFocus=trigger;else current.close();const dialog=$('case-'+key);if(key==='materials')syncMaterialContext();dialog.showModal();document.documentElement.classList.add('study-modal-open');dialog.querySelector('[data-close]').focus();}
