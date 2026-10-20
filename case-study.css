@@ -17,3 +17,5 @@
 
 .hero-overview .window-bar b{font-size:18px;line-height:1.5;font-weight:550}
 @media(max-width:600px){.hero-overview .window-bar b{font-size:16px}}
+.overview-scope-note{font-size:10px;line-height:1.8;color:var(--muted);margin:14px 0 0}
+@media(max-width:700px){.overview-metrics strong{grid-row:auto}.overview-metrics b{align-self:center}}
