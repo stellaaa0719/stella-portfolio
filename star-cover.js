@@ -37,7 +37,7 @@ const project=([lon,lat])=>[(lon+180)/360*1000,(82-lat)/148*480];
 const polygons=land.map(poly=>poly.map(project));
 function contains(x,y,poly){let inside=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])inside=!inside;}return inside;}
 const points=[];
-function add(x,y,coast){points.push({u:x,v:y,coast,phase:random()*Math.PI*2,jx:(random()-.5)*(coast?13:25),jy:(random()-.5)*(coast?13:25),r:.45+random()*.65,alpha:.38+random()*.46,energy:0,x:0,y:0,s:random()});}
+function add(x,y,coast){points.push({u:x,v:y,coast,phase:random()*Math.PI*2,jx:(random()-.5)*(coast?13:25),jy:(random()-.5)*(coast?13:25),r:.55+random()*.76,alpha:.46+random()*.46,energy:0,x:0,y:0,s:random()});}
 for(const poly of polygons){for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length];const n=Math.max(1,Math.ceil(Math.hypot(a[0]-b[0],a[1]-b[1])/13));for(let j=0;j<n;j++){if(random()>.13)add(lerp(a[0],b[0],j/n)+(random()-.5)*3,lerp(a[1],b[1],j/n)+(random()-.5)*3,true);}}}
 for(let y=24;y<460;y+=17){for(let x=20;x<985;x+=18){const px=x+(random()-.5)*13,py=y+(random()-.5)*13;if(random()<.62&&polygons.some(poly=>contains(px,py,poly)))add(px,py,false);}}
 const sOrder=points.map((p,i)=>({s:p.s,i})).sort((a,b)=>a.s-b.s);
@@ -45,10 +45,17 @@ const edges=[];
 points.forEach((p,i)=>{const neighbors=[];points.forEach((q,j)=>{if(i===j)return;const d=Math.hypot(p.u-q.u,p.v-q.v);if(d>7&&d<34)neighbors.push({j,d});});neighbors.sort((a,b)=>a.d-b.d);neighbors.slice(0,p.coast?2:3).forEach(({j,d})=>{if(j>i)edges.push({a:i,b:j,d});});});
 const mobileEdges=[];
 points.forEach((p,i)=>{if(i%3!==0)return;const near=[];points.forEach((q,j)=>{if(j%3!==0||i===j)return;const d=Math.hypot(p.u-q.u,p.v-q.v);if(d>8&&d<66)near.push({j,d});});near.sort((a,b)=>a.d-b.d);near.slice(0,2).forEach(({j,d})=>{if(j>i)mobileEdges.push({a:i,b:j,d});});});
-const background=Array.from({length:85},()=>({u:random(),v:random(),r:.25+random()*.65,alpha:.18+random()*.34,phase:random()*6.28,cross:random()<.055}));
+const background=Array.from({length:85},()=>({u:random(),v:random(),r:.30+random()*.72,alpha:.23+random()*.38,phase:random()*6.28,cross:random()<.055}));
 let width=0,height=0,dpr=1,frame=0,last=0,visible=true,progress=0,scrollDirty=true,shapeStart=0,staticShape=false,shapeTimer=0;
 let layout={x:0,y:0,w:0,h:0};
 const pointer={x:-10000,y:-10000,at:-10000,down:false};
+const portals=[...document.querySelectorAll('.star-portal')];
+const dust=[];let lastDust=0;
+function textAttenuation(x,y){if(width<=700)return 1;const dx=(x-width*.5)/(width*.28),dy=(y-height*.65)/(height*.27);return .27+.73*smooth(Math.hypot(dx,dy));}
+function emitDust(x,y,burst=false){if(!motionEnabled()||progress>.45)return;const now=performance.now();if(!burst&&now-lastDust<20)return;lastDust=now;const n=burst?8:2;for(let i=0;i<n;i++){dust.push({x:x+9+(random()-.5)*9,y:y+9+(random()-.5)*9,vx:(random()-.5)*.018,vy:(random()-.4)*.018,born:now,life:650+random()*400,r:.65+random()*.85,star:i===0||random()<.22});}if(dust.length>80)dust.splice(0,dust.length-80);}
+function drawDust(now){if(!motionEnabled())return;for(let i=dust.length-1;i>=0;i--){const d=dust[i],age=now-d.born;if(age>d.life){dust.splice(i,1);continue;}const t=age/d.life,x=d.x+d.vx*age,y=d.y+d.vy*age;const alpha=(1-t)*( .70+.20*Math.sin(t*Math.PI))*(1-progress);ctx.globalAlpha=alpha;ctx.fillStyle='#d2e0e7';ctx.beginPath();ctx.arc(x,y,d.r*(1-t*.35),0,Math.PI*2);ctx.fill();if(d.star){const r=(2+d.r)*(1-t*.5);ctx.globalAlpha=alpha*.7;ctx.strokeStyle='#c5d9e4';ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(x-r,y);ctx.lineTo(x+r,y);ctx.moveTo(x,y-r);ctx.lineTo(x,y+r);ctx.stroke();}}
+ const age=now-pointer.at;if(age<300&&progress<.45){const alpha=(1-age/300)*.75,x=pointer.x+9,y=pointer.y+9;ctx.globalAlpha=alpha;ctx.strokeStyle='#e1ebef';ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(x-4,y);ctx.lineTo(x+4,y);ctx.moveTo(x,y-4);ctx.lineTo(x,y+4);ctx.moveTo(x-2,y-2);ctx.lineTo(x+2,y+2);ctx.moveTo(x+2,y-2);ctx.lineTo(x-2,y+2);ctx.stroke();}ctx.globalAlpha=1;
+}
 function motionEnabled(){return !reduced.matches&&document.documentElement.dataset.motion!=='off';}
 function size(){width=window.innerWidth;height=window.innerHeight;dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);const mobile=width<=700;let w=mobile?width*1.12:Math.min(width*.87,1550);if(!mobile)w=Math.min(w,height*.72/0.48);layout={x:mobile?(width-w)*.5:width-w-width*.035,y:mobile?Math.max(96,height*.12):height*.14,w,h:w*.48};updateScroll();points.forEach(p=>{p.x=layout.x+p.u/1000*layout.w;p.y=layout.y+p.v/480*layout.h;});draw(performance.now(),0);schedule();}
 function updateScroll(){const rect=stage.getBoundingClientRect();progress=clamp(-rect.top/(height*.92));stage.classList.toggle('bridge-visible',progress>.42);document.body.classList.toggle('day-mode',rect.bottom<height*.55);canvas.parentElement.style.opacity=rect.bottom>0?'1':'0';canvas.parentElement.style.clipPath='inset(0px 0px '+Math.max(0,height-rect.bottom)+'px 0px)';scrollDirty=false;}
@@ -64,21 +71,21 @@ function draw(now,dt){if(scrollDirty)updateScroll();ctx.fillStyle='#0b131b';ctx.
   const ease=active&&dt>0?1-Math.exp(-dt*.005):1;point.x=lerp(point.x,tx,ease);point.y=lerp(point.y,ty,ease);
  });
  ctx.lineWidth=.55;ctx.strokeStyle='#8ba9bf';
- for(const edge of (width<=700?mobileEdges:edges)){const a=points[edge.a],b=points[edge.b];const energy=Math.max(a.energy,b.energy);const copyDim=(a.x<width*.47&&a.y>height*.52&&width>700)?.40:1;const alpha=(.10+energy*.25)*(1-progress*.85)*(1-mix)*copyDim;if(alpha<.008)continue;ctx.globalAlpha=alpha;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+ for(const edge of (width<=700?mobileEdges:edges)){const a=points[edge.a],b=points[edge.b];const energy=Math.max(a.energy,b.energy);const copyDim=textAttenuation((a.x+b.x)*.5,(a.y+b.y)*.5);const alpha=(.13+energy*.24)*(1-progress*.85)*(1-mix)*copyDim;if(alpha<.008)continue;ctx.globalAlpha=alpha;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
  if(mix>.01){ctx.globalAlpha=.14*mix;ctx.beginPath();sOrder.forEach(({i},j)=>{const p=points[i];if(j===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y);});ctx.stroke();}
- for(let i=0;i<points.length;i++){if(width<=700&&i%3!==0)continue;const point=points[i];const copyDim=(point.x<width*.47&&point.y>height*.5&&width>700)?.36:1;let alpha=point.alpha*(.86+point.energy*.50)*worldAlpha*copyDim;if(progress>.2&&i%13===0)alpha=Math.max(alpha,.30*p);ctx.globalAlpha=clamp(alpha);ctx.fillStyle=point.energy>.3?'#e5edf0':'#bfccd5';ctx.beginPath();ctx.arc(point.x,point.y,point.r*(1+point.energy*.55),0,Math.PI*2);ctx.fill();}
- ctx.globalAlpha=1;
+ for(let i=0;i<points.length;i++){if(width<=700&&i%3!==0)continue;const point=points[i];const copyDim=textAttenuation(point.x,point.y);let alpha=point.alpha*(1.03+point.energy*.43)*worldAlpha*copyDim;if(progress>.2&&i%13===0)alpha=Math.max(alpha,.30*p);ctx.globalAlpha=clamp(alpha);ctx.fillStyle=point.energy>.3?'#e5edf0':'#bfccd5';ctx.beginPath();ctx.arc(point.x,point.y,point.r*(1+point.energy*.55),0,Math.PI*2);ctx.fill();}
+ drawDust(now);ctx.globalAlpha=1;
 }
 function tick(now){frame=0;if(!visible||document.hidden)return;const dt=Math.min(40,now-(last||now));last=now;draw(now,dt);if(motionEnabled())frame=requestAnimationFrame(tick);}
 function schedule(){if(!frame&&visible&&!document.hidden){last=0;frame=requestAnimationFrame(tick);}}
-function pointerEvent(event){if(event.target.closest('a,button,input'))return;pointer.x=event.clientX;pointer.y=event.clientY;pointer.at=performance.now();if(!motionEnabled())draw(pointer.at,0);else schedule();}
-hero.addEventListener('pointermove',event=>{if(event.pointerType==='mouse'||event.buttons)pointerEvent(event);},{passive:true});
-hero.addEventListener('pointerdown',pointerEvent,{passive:true});
-hero.addEventListener('pointerleave',()=>{pointer.at=Math.min(pointer.at,performance.now()-600);},{passive:true});
+function pointerEvent(event,burst=false){pointer.x=event.clientX;pointer.y=event.clientY;pointer.at=performance.now();emitDust(pointer.x,pointer.y,burst);const near=portals.map(el=>{const r=el.getBoundingClientRect();return Math.hypot(r.x+r.width*.5-pointer.x,r.y+r.height*.45-pointer.y)<(width<=700?110:170);});portals.forEach((el,i)=>el.classList.toggle('is-near',near[i]));if(!motionEnabled())draw(pointer.at,0);else schedule();}
+hero.addEventListener('pointermove',event=>{if(event.pointerType==='mouse')pointerEvent(event);},{passive:true});
+hero.addEventListener('pointerdown',event=>pointerEvent(event,true),{passive:true});
+hero.addEventListener('pointerleave',()=>{pointer.at=Math.min(pointer.at,performance.now()-600);portals.forEach(el=>el.classList.remove('is-near'));},{passive:true});
 window.addEventListener('scroll',()=>{scrollDirty=true;if(!motionEnabled()){updateScroll();draw(performance.now(),0);}else schedule();},{passive:true});
 let resizeFrame=0;window.addEventListener('resize',()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(size);},{passive:true});
 document.getElementById('constellation-mark').addEventListener('click',()=>{pointer.at=-10000;clearTimeout(shapeTimer);status.textContent='星点汇聚为字母 S，随后回到世界星图。';canvas.dataset.shape='s';if(motionEnabled()){shapeStart=performance.now();staticShape=false;schedule();}else{staticShape=true;draw(performance.now(),0);shapeTimer=setTimeout(()=>{staticShape=false;canvas.dataset.shape='world';status.textContent='星点已回到世界星图。';draw(performance.now(),0);},1700);}});
-function syncMotion(){const enabled=motionEnabled();stage.classList.toggle('sky-static',!enabled);if(!enabled){cancelAnimationFrame(frame);frame=0;shapeStart=0;staticShape=false;clearTimeout(shapeTimer);canvas.dataset.shape='world';draw(performance.now(),0);}else schedule();}
+function syncMotion(){const enabled=motionEnabled();stage.classList.toggle('sky-static',!enabled);if(!enabled){dust.length=0;cancelAnimationFrame(frame);frame=0;shapeStart=0;staticShape=false;clearTimeout(shapeTimer);canvas.dataset.shape='world';draw(performance.now(),0);}else schedule();}
 new MutationObserver(syncMotion).observe(document.documentElement,{attributes:true,attributeFilter:['data-motion']});reduced.addEventListener('change',syncMotion);
 document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;last=0;}else schedule();});
 if('IntersectionObserver' in window){new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(!visible){updateScroll();cancelAnimationFrame(frame);frame=0;}else schedule();},{threshold:0}).observe(stage);}
