@@ -1,18 +1,17 @@
 /* Shared mist-blue surfaces; the night-sky cover keeps its original palette. */
 :root{--paper:#e3ecf1;--warm:#d9e5ec;--green:#d5e2e9;--line:#c3d2dc;--muted:#627582}
 .product-case{--ink:#283b46;--sage:#4c697b;--muted:#617584;--line:#c5d4de;--panel:#dce7ee;--paper:#eff4f7;--cream:#e3ecf1}
-.star-home{background:#e3ecf1}
-.home-about{background:#e3ecf1}.home-footer{background:#e3ecf1;border-color:#c3d2dc;color:#607586}
-.home-about-copy>p:not(.eyebrow){color:#607380}.home-about-links{color:#4c687b}
-.night-project{background:#e3ecf1;color:#283b46;box-shadow:0 0 0 100vmax #e3ecf1;clip-path:inset(0 -100vmax)}
-.night-section-heading h2,.night-opportunity h3{color:#283b46}
-.night-section-heading>p,.night-project .sky-eyebrow,.night-project-caption{color:#647d8e}
-.bridge-sources>div{background:#d8e5ed;border-color:#b8ccd9}
-.bridge-sources small,.night-card-top,.night-card-label,.night-opportunity dt{color:#607d90}
-.bridge-sources b,.night-opportunity dd,.night-card-top small{color:#354f60}
-.night-opportunity{background:#eff4f7;border-color:#b8cddc}
-.night-card-top,.night-opportunity>a{border-color:#c5d4de}
-.night-opportunity>a,.night-project-caption>a{color:#3b627c}
-.night-opportunity>a:hover{color:#213f53}
-.bridge-source-icon{color:#638aa2}.bridge-connections circle{fill:#65869d}
-.star-home.day-mode .motion-controls{background:#e3ecf1}
+/* The homepage continues the cover's night palette below the fold. */
+.star-home{background:#0b131b;color:#e6e8e8}
+.star-home .home-about,.star-home .home-footer{background:#0b131b;color:#c6d3dc}
+.star-home .home-about h2{color:#e6eae7}
+.star-home .home-about-copy>p:not(.eyebrow){color:#a8b8c3}
+.star-home .home-about .eyebrow{color:#829aaa}
+.star-home .home-education{border-color:#98adba26}
+.star-home .home-education b{color:#d2dce2}
+.star-home .home-education span{color:#8fa5b3}
+.star-home .home-about-links{color:#bbcfdd}
+.star-home .home-about-links a{border-color:#7a96a655}
+.star-home .about-portrait{background:#13212b;border-color:#8da3b52e}
+.star-home .about-portrait>small{color:#a3b7c4}
+.star-home .home-footer{border-color:#98adba26;color:#8fa5b3}
