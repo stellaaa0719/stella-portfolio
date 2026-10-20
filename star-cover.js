@@ -5,6 +5,9 @@ if(!canvas)return;
 const ctx=canvas.getContext('2d',{alpha:false});
 if(!ctx)return;
 const stage=document.getElementById('night-stage');
+// Keep the motion preference accessible, away from the hosting badge.
+const motionControls=document.querySelector('.motion-controls');
+if(motionControls)document.querySelector('.sky-header nav').append(motionControls);
 const hero=document.querySelector('.sky-hero');
 const status=document.getElementById('sky-status');
 const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -46,6 +49,8 @@ points.forEach((p,i)=>{const neighbors=[];points.forEach((q,j)=>{if(i===j)return
 const mobileEdges=[];
 points.forEach((p,i)=>{if(i%3!==0)return;const near=[];points.forEach((q,j)=>{if(j%3!==0||i===j)return;const d=Math.hypot(p.u-q.u,p.v-q.v);if(d>8&&d<66)near.push({j,d});});near.sort((a,b)=>a.d-b.d);near.slice(0,2).forEach(({j,d})=>{if(j>i)mobileEdges.push({a:i,b:j,d});});});
 const background=Array.from({length:85},()=>({u:random(),v:random(),r:.30+random()*.72,alpha:.23+random()*.38,phase:random()*6.28,cross:random()<.055}));
+// A loose western star field balances the map without adding more land detail.
+background.push(...Array.from({length:48},()=>({u:.025+random()*.29,v:.16+random()*.74,r:.45+random()*.65,alpha:.38+random()*.32,phase:random()*6.28,cross:random()<.10})));
 let width=0,height=0,dpr=1,frame=0,last=0,visible=true,progress=0,scrollDirty=true,shapeStart=0,staticShape=false,shapeTimer=0;
 let layout={x:0,y:0,w:0,h:0};
 const pointer={x:-10000,y:-10000,at:-10000,down:false};

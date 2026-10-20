@@ -22,3 +22,24 @@
 .portal-label{opacity:.72}
 @media(max-width:700px){.sky-hero{min-height:max(940px,100svh)}.sky-copy{padding-top:clamp(250px,32svh,290px)}.star-portals{gap:8px 30px}.star-portal{min-height:102px}.portal-label{opacity:1}.sky-touch-hint{top:245px}}
 @media(max-width:360px){.sky-copy{padding-top:245px}.sky-hero{min-height:940px}.sky-touch-hint{top:220px}}
+
+/* Bilingual identity and readable constellation destinations. */
+.sky-copy{top:51%;transform:translate(-50%,-25%)}
+.sky-copy .sky-eyebrow{font-size:11px;letter-spacing:2px}
+.portal-label b{font-size:16px}.portal-projects .portal-label b{font-size:18px}
+.portal-label small{font-size:9px;letter-spacing:1.5px;color:#8fa8b5}
+.sky-copy .sky-role{margin:12px 0 20px}
+.sky-role>span{display:block;font-size:11px;letter-spacing:1.8px;color:#8fa5b2;margin-top:7px}
+.sky-intro>p{margin:0 0 9px;line-height:1.7}
+.sky-intro [lang=en]{display:block;font-size:11px;color:#8fa5b2;letter-spacing:.2px;line-height:1.7}
+.sky-actions{margin-top:24px}
+.action-copy{display:block;font-weight:400;text-align:left;line-height:1.5}
+.action-copy small{display:block;font-size:9px;letter-spacing:.3px;opacity:.75}
+.star-home .sky-header .motion-controls{position:static;inset:auto;display:flex;margin:0 0 0 8px;padding:0;border:0;background:none;box-shadow:none;backdrop-filter:none;transform:none;z-index:auto}
+.sky-header .motion-controls>span{display:none}
+.star-home .sky-header .motion-controls button{font-size:10px;color:#9aadb8;background:transparent;border:1px solid #9aadb833;border-radius:4px;padding:5px 8px;white-space:nowrap;line-height:1.5}
+.sky-header .motion-controls button:hover{color:#e0e6e8;border-color:#9aadb888}
+@media(min-width:1600px){.portal-label b{font-size:18px}.portal-projects .portal-label b{font-size:20px}.portal-label small{font-size:10px}.sky-copy .sky-eyebrow{font-size:12px}}
+@media(min-width:701px) and (max-width:1000px){.portal-label b{font-size:15px}.portal-projects .portal-label b{font-size:17px}.sky-copy{top:48%}}
+@media(max-width:700px){.sky-copy{top:auto;transform:none;padding-top:clamp(210px,27svh,240px)}.sky-copy .sky-eyebrow{font-size:8px;letter-spacing:1px}.sky-role>span{font-size:10px;letter-spacing:1px}.sky-copy .sky-role{margin-bottom:15px}.sky-intro [lang=en]{font-size:10px}.sky-intro>p{margin-bottom:7px}.sky-actions{margin-top:18px}.portal-label b,.portal-projects .portal-label b{font-size:14px}.portal-label small{font-size:8px;letter-spacing:1px}.sky-hero{min-height:max(1010px,100svh)}.star-home .sky-header{gap:10px}.star-home .sky-header nav{gap:12px}.star-home .sky-header .motion-controls{margin-left:0}.star-home .sky-header .motion-controls button{font-size:9px;padding:4px}.sky-touch-hint{top:185px}}
+@media(max-width:360px){.sky-copy{padding-top:210px}.sky-copy .sky-eyebrow{font-size:7px;letter-spacing:.8px}.star-home .sky-header nav{gap:8px}.sky-actions{gap:18px}.sky-primary{min-width:135px}.sky-copy .sky-intro{font-size:10px}.sky-intro [lang=en]{font-size:9px}.sky-touch-hint{top:180px}}
