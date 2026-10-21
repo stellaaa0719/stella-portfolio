@@ -2,6 +2,12 @@
 
 纯静态 HTML / CSS / JavaScript，无需安装依赖或构建。
 
+在线访问：[Stella 个人作品集](https://stellaaa0719.github.io/stella-portfolio/)
+
+## GitHub Pages 自动更新
+
+发布源为 `main` 分支的仓库根目录。修改后 commit 并 push，GitHub Pages 会自动发布；部署需要短暂等待，不是本地文件实时同步。`.nojekyll` 保持原始静态文件直接发布，无需构建。
+
 ## 打开网站
 
 解压后双击 `index.html` 可浏览。也可在源码目录运行：
