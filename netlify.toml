@@ -1,3 +1,5 @@
 [build]
   publish = "."
   command = ""
+  # GitHub Pages is the active host; skip Netlify Git builds.
+  ignore = "exit 0"

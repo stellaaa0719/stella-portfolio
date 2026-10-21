@@ -1,0 +1,1 @@
+(()=>{const status=document.getElementById('contact-status');document.querySelectorAll('[data-copy]').forEach(button=>button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(button.dataset.copy);status.textContent='已复制，可粘贴使用。';}catch{status.textContent='请选中号码手动复制。';}}));})();

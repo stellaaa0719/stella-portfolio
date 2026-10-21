@@ -1,0 +1,29 @@
+/* One continuous document: night-sky identity, product evidence, then background. */
+.single-page>main{max-width:none;margin:0;padding:0}
+.single-page .sky-hero{opacity:1!important;transform:none!important}
+.single-page #night-stage{min-height:100svh}
+.single-page .inline-project{padding-top:35px;padding-bottom:55px;position:relative;z-index:1}
+.single-page .role-strip{flex-wrap:wrap}.single-page .role-credit{flex-basis:100%;font-size:11px;line-height:1.9;color:var(--muted);margin:10px 0 0}
+.single-page .product-case .wrap{max-width:1200px}
+.single-page .single-profile{position:relative;background:#0b131b;color:#d5dfe5;padding:70px 0 55px}
+.single-profile-wrap{--ink:#d5dfe5;--muted:#9fb0bd;--line:#34444f;--paper:#13212b}
+.single-profile .detail-heading{padding-top:0;margin-bottom:30px}.single-profile .detail-heading h2{font-size:36px;line-height:1.4;margin:12px 0}.single-profile .detail-heading p{color:#9fb0bd}
+.single-profile .career-record,.single-profile .education-details{background:#13212b;border-color:#34444f}
+.single-profile .record-heading h3,.single-profile .education-school b,.single-profile .education-degree b{color:#dce4e8}
+.single-profile .career-record p,.single-profile .education-item em,.single-profile .education-degree small{color:#a8bbc8}
+.single-profile .record-role,.single-profile .inline-link,.single-profile .course-details summary{color:#a8c9dd}
+.single-profile .education-details{padding:5px 25px}.single-profile .education-item{border-color:#34444f}
+.single-profile .compact-tools{margin-top:65px}.single-profile .compact-tools h2{color:#d5dfe5}
+.single-profile .compact-tools dt{color:#c5d8e4}.single-profile .compact-tools dd{color:#9fb0bd}
+.single-page .single-contact{display:grid;grid-template-columns:1fr 1fr;gap:70px;padding-top:50px;padding-bottom:65px;border-top:1px solid #34444f;color:#d5dfe5;position:relative}
+.single-contact h2{font-size:32px;margin:12px 0}.single-contact p{font-size:13px;line-height:1.9;color:#9fb0bd}.single-contact .eyebrow{color:#829aaa}
+.single-contact .contact-row{border-color:#34444f}.single-contact .contact-row b,.single-contact .contact-row a{color:#d5dfe5}.single-contact .copy-contact{background:#182b38;border-color:#405666;color:#bdd2df}.single-resume{display:inline-block;color:#bdd2df;font-size:12px;margin-top:12px;border-bottom:1px solid #405666;padding-bottom:6px}
+.single-page [id]{scroll-margin-top:25px}.single-page #main{scroll-margin-top:0}
+.single-page .sky-header nav{gap:22px}.single-page .sky-header .motion-controls{margin-left:0}
+.single-page .iteration-section{padding-bottom:25px}.single-page .iteration-section h2{font-size:27px}
+@media(max-width:700px){.single-page .sky-header{padding-left:20px;padding-right:20px;gap:12px}.single-page .sky-header nav{gap:10px}.single-page .sky-header nav a{font-size:10px;letter-spacing:0}.single-page .inline-project{padding-top:20px;padding-bottom:35px}.single-page .single-profile{padding:45px 0 30px}.single-profile .detail-heading h2{font-size:29px}.single-profile .career-record{padding:22px}.single-page .single-contact{grid-template-columns:1fr;gap:15px;padding-top:30px;padding-bottom:45px}.single-profile .compact-tools{margin-top:45px}.single-page .role-credit{font-size:10px}.single-page .iteration-section h2{font-size:23px}}
+@media(max-width:360px){.single-page .sky-header nav{gap:7px}.single-page .sky-header nav a{font-size:9px}.single-page .sky-header{gap:8px}}
+/* Long inline sections must not wait for a section-wide intersection threshold. */
+.single-page main>section.reveal-ready{opacity:1;transform:none;transition:none}
+.single-profile .education-school em{background:#243c4d;color:#bcd0df;border-color:#405767}
+.single-profile .record-heading>span{color:#9fb0bd}
