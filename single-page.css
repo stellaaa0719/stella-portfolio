@@ -114,3 +114,7 @@
 .single-page .role-strip small{margin:0}
 .single-page .role-credit{grid-column:2;margin:0}
 @media(max-width:700px){.single-page .result-hero{padding-top:30px;padding-bottom:35px}.single-page .hero-copy h1{font-size:clamp(30px,7.8vw,42px);margin:15px 0 20px;letter-spacing:-1px}.single-page .role-strip{grid-template-columns:1fr;row-gap:5px;margin-top:24px;padding-top:16px}.single-page .role-credit{grid-column:1;margin-top:4px}.single-page .hero-value{margin-bottom:22px}}
+
+/* Tools form a separate section after the project. */
+.single-page .single-tools{padding-top:50px;padding-bottom:50px}.single-tools .compact-tools{margin-top:0}
+@media(max-width:700px){.single-page .single-tools{padding-top:35px;padding-bottom:35px}.single-tools .compact-tools{margin-top:0}}
