@@ -27,3 +27,49 @@
 .single-page main>section.reveal-ready{opacity:1;transform:none;transition:none}
 .single-profile .education-school em{background:#243c4d;color:#bcd0df;border-color:#405767}
 .single-profile .record-heading>span{color:#9fb0bd}
+
+/* The full page shares the cover's blue-gray night background. */
+.single-page .inline-project{--ink:#dce5eb;--sage:#a8c7d9;--muted:#a0b3c0;--line:#344956;--panel:#172936;--paper:#13212b;--cream:#0b131b;background:#0b131b;color:var(--ink)}
+.inline-project .hero-product,.inline-project .product-shell,.inline-project .document-panel{background:#13212b;border-color:#344956;box-shadow:0 12px 40px #00000018}
+.inline-project .window-bar,.inline-project .app-topbar,.inline-project .document-toolbar{background:#172936;color:#dce5eb;border-color:#344956}
+.inline-project .window-dots{color:#829ba9}
+.inline-project .pill{background:#1c3241;color:#bed2df;border-color:#405969}
+.inline-project .deliverable-list>a,.inline-project .signal-item,.inline-project .follow-draft,.inline-project .feedback-options button,.inline-project .reference-source,.inline-project .material-gate{background:#13212b;border-color:#344956;color:#dce5eb}
+.inline-project .deliverable-list>a:hover{background:#1b3040;border-color:#607f93}
+.inline-project .deliverable-icon,.inline-project .context-icon,.inline-project .source-channel i{background:#243e50;color:#bdd9e9}
+.inline-project .deliverable-list>a>span:last-child,.inline-project .app-mark,.inline-project .step-tabs span,.inline-project .feedback-options span{color:#a6c7da}
+.inline-project .overview-metrics strong,.inline-project .metrics strong{color:#b9d6e6}
+.inline-project .solid,.inline-project .small-solid{background:#294758;border-color:#52768c;color:#eff5f8!important}
+.inline-project .solid:hover,.inline-project .small-solid:hover{background:#365a70}
+.inline-project .demo-controls button{color:#d0e0ea;border-color:#5a7687}
+.inline-project .step-tabs,.inline-project .chapter-tabs,.inline-project .app-status{background:#101d27}
+.inline-project .step-tabs [aria-selected=true],.inline-project .chapter-tabs [aria-selected=true]{background:#233e50;border-bottom-color:#a3cadd;color:#e6eff4}
+.inline-project .customer-context{background:#142631;border-color:#344956}
+.inline-project .context-top small,.inline-project .context-timeline small,.inline-project .context-footer,.inline-project .document-pending,.inline-project .document-paper>small{color:#9eb5c4;border-color:#344956}
+.inline-project .context-timeline li:before{background:#9bbfd4}
+.inline-project .context-toggle{color:#b5d0e1!important}
+.inline-project .signal-badges span{background:#1a303e;border-color:#3b5567;color:#b4cbd9}
+.inline-project .signal-badges .relevance{background:#223f4c;color:#c0dde6}
+.inline-project .source-filter input{accent-color:#a0cadd}
+.inline-project .signal-item[aria-pressed=true],.inline-project .feedback-options [aria-pressed=true]{background:#213b4b;border-color:#8ab2ca;box-shadow:inset 3px 0 #a4c8dc}
+.inline-project .policy-quote,.inline-project .link-record,.inline-project .rewrite-command,.inline-project .evidence-toggle{background:#172c3a;border-color:#5f8298;color:#d4e2eb}
+.inline-project .opportunity-result{background:#172c3a;border-color:#405e72}
+.inline-project .boundary{color:#adc1ce;border-color:#405969}
+.inline-project .evidence-linked .policy-quote,.inline-project .evidence-linked .evidence-node,.inline-project .source-inspector:not(:empty),.inline-project .confirmation-result{background:#203c4d;border-color:#8ab2ca;color:#d9e8f1}
+.inline-project .evidence-linked .policy-quote mark{background:#31576e;box-shadow:0 0 0 3px #31576e;color:#f0f7fb}
+.inline-project .evidence-connector{color:#9dbfd3}
+.inline-project .reference-source.is-highlighted{background:#234354;border-color:#91b9ce;box-shadow:0 0 0 2px #4d759044}
+.inline-project .cite{background:#284b60;border-color:#6d96ae;color:#e0eff8!important}
+.inline-project .editable-paragraph mark{background:#284f65;color:#e3f2fa}
+.inline-project .editable-paragraph s{color:#91aab9;text-decoration-color:#6f8fa3}
+.inline-project .rewrite-button{background:#294758;border-color:#6d96ae;color:#e4f0f7}
+.inline-project .confirm-zone small{color:#b4d2e2}
+.inline-project .tour-bar{background:#203b4c;border-color:#577c93;color:#dcebf4}
+.inline-project details{background:#13212b;border-color:#344956;color:#dce5eb}
+.inline-project .comparison-toggle{background:#162936}
+.inline-project .comparison-toggle [aria-pressed=true]{background:#2a4b60;border-color:#739bb2;color:#eff6fa;box-shadow:none}
+.inline-project .iteration-strip small{color:#b1cddd}
+.inline-project .iteration-strip>span{color:#8eafc3}
+.inline-project button:hover:not(:disabled){border-color:#8fb5cd}
+.inline-project .is-changed{animation-name:night-context-in}
+@keyframes night-context-in{from{background-color:#31576e}to{background-color:transparent}}
