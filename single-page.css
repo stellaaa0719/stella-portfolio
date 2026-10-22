@@ -138,24 +138,4 @@
 .single-page{isolation:isolate}
 .single-page>.star-layer{z-index:-1;opacity:1;clip-path:none}
 .single-page #night-stage,.single-page .inline-project,.single-page .single-profile,.single-page .single-contact,.single-page .home-footer{background:transparent}
-.single-page #about-me .career-record,.single-page #about-me .education-item{position:relative}
-.profile-stars{position:absolute;right:18px;bottom:13px;width:66px;height:29px;pointer-events:none;overflow:visible;color:#a9c9dc;opacity:.5}
-.profile-stars>path{fill:none;stroke:currentColor;stroke-width:.7;opacity:0;stroke-dasharray:80;stroke-dashoffset:16;transition:opacity .55s ease,stroke-dashoffset .7s ease}
-.profile-stars>circle{fill:currentColor;opacity:.65;transition:transform .8s ease,opacity .5s ease}
-.profile-stars>circle:nth-of-type(1){transform:translate(-4px,2px)}.profile-stars>circle:nth-of-type(2){transform:translate(2px,-3px)}.profile-stars>circle:nth-of-type(3){transform:translate(-2px,3px)}.profile-stars>circle:nth-of-type(4){transform:translate(3px,0)}
-.profile-stars>.profile-star-cross{stroke-dasharray:none;opacity:.3}
-.is-star-active .profile-stars{opacity:1}
-.is-star-active .profile-stars>path{opacity:.7;stroke-dashoffset:0}
-.is-star-active .profile-stars>circle{transform:translate(0,0);opacity:1}
-.single-page #about-me .is-star-active{box-shadow:0 0 0 1px #91b5cc44}
-.single-page #about-me .profile-reveal{opacity:.45;transform:translateY(9px);transition:opacity .5s ease,transform .5s ease,box-shadow .5s ease}
-.single-page #about-me .profile-reveal.profile-visible{opacity:1;transform:none}
-.single-page #about-me .course-details{padding-right:64px}
-.single-page #about-me .education-item{padding-bottom:28px}
-@media(max-width:700px){.profile-stars{right:12px;bottom:10px;width:52px;height:24px}.single-page #about-me .course-details{padding-right:52px}}
-@media(prefers-reduced-motion:reduce){.single-page #about-me .profile-reveal{opacity:1;transform:none}.profile-stars>circle{transform:none}.profile-stars>path{opacity:.25;stroke-dashoffset:0}}
-html[data-motion=off] .single-page #about-me .profile-reveal{opacity:1;transform:none}
-html[data-motion=off] .profile-stars>circle{transform:none}
-html[data-motion=off] .profile-stars>path{opacity:.25;stroke-dashoffset:0}
-.profile-stars{transition:opacity .55s ease}
 .single-page #about-me summary:focus-visible{outline:2px solid #98b0c1;outline-offset:5px}
