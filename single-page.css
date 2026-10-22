@@ -122,3 +122,15 @@
 /* Full navigation labels stay readable on narrow screens. */
 @media(max-width:700px){.single-page .sky-header{flex-wrap:wrap;gap:8px}.single-page .sky-header nav{width:100%;justify-content:space-between;gap:6px}.single-page .sky-header nav a{font-size:10px}.single-page .sky-header .motion-controls{margin-left:0}}
 @media(max-width:360px){.single-page .sky-header nav a{font-size:9px}}
+
+/* Cover entrance hierarchy: products/about, then tools, then contact. */
+.single-page .portal-projects .portal-label b,.single-page .portal-personal .portal-label b{font-size:22px;font-weight:500}
+.single-page .portal-projects .portal-label small,.single-page .portal-personal .portal-label small{font-size:10px}
+.single-page .portal-personal .portal-label{opacity:.9}
+.single-page .portal-tools .portal-label b{font-size:18px}
+.single-page .portal-tools .portal-label small{font-size:9px}
+.single-page .portal-contact .portal-label b{font-size:14px}
+.single-page .portal-contact .portal-label small{font-size:8px}
+@media(min-width:1600px){.single-page .portal-projects .portal-label b,.single-page .portal-personal .portal-label b{font-size:24px}.single-page .portal-tools .portal-label b{font-size:20px}.single-page .portal-contact .portal-label b{font-size:16px}}
+@media(max-width:700px){.single-page .portal-projects .portal-label b,.single-page .portal-personal .portal-label b{font-size:18px}.single-page .portal-projects .portal-label small,.single-page .portal-personal .portal-label small{font-size:9px}.single-page .portal-tools .portal-label b{font-size:15px}.single-page .portal-tools .portal-label small{font-size:8px}.single-page .portal-contact .portal-label b{font-size:12px}.single-page .portal-contact .portal-label small{font-size:7px}.single-page .portal-personal .portal-label{opacity:1}}
+@media(max-width:360px){.single-page .portal-projects .portal-label b,.single-page .portal-personal .portal-label b{font-size:17px}.single-page .portal-tools .portal-label b{font-size:14px}}
