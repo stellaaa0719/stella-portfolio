@@ -63,22 +63,31 @@ function drawDust(now){if(!motionEnabled())return;for(let i=dust.length-1;i>=0;i
 }
 function motionEnabled(){return !reduced.matches&&document.documentElement.dataset.motion!=='off';}
 function size(){width=window.innerWidth;height=window.innerHeight;dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);const mobile=width<=700;let w=mobile?width*1.12:Math.min(width*.87,1550);if(!mobile)w=Math.min(w,height*.72/0.48);layout={x:mobile?(width-w)*.5:width-w-width*.035,y:mobile?Math.max(96,height*.12):height*.14,w,h:w*.48};updateScroll();points.forEach(p=>{p.x=layout.x+p.u/1000*layout.w;p.y=layout.y+p.v/480*layout.h;});draw(performance.now(),0);schedule();}
-function updateScroll(){const rect=stage.getBoundingClientRect();progress=clamp(-rect.top/(height*.92));stage.classList.toggle('bridge-visible',progress>.42);document.body.classList.toggle('day-mode',rect.bottom<height*.55);canvas.parentElement.style.opacity=rect.bottom>0?'1':'0';canvas.parentElement.style.clipPath='inset(0px 0px '+Math.max(0,height-rect.bottom)+'px 0px)';scrollDirty=false;}
+function updateScroll(){const rect=stage.getBoundingClientRect();progress=clamp(-rect.top/(height*.92));stage.classList.toggle('bridge-visible',progress>.42);canvas.dataset.scene=progress>=.99?'field':progress>.05?'transition':'world';scrollDirty=false;}
 function bezier(t,a,b,c,d){const v=1-t;return v*v*v*a+3*v*v*t*b+3*v*t*t*c+t*t*t*d;}
 function sPosition(t){let x,y;if(t<.5){const v=t*2;x=bezier(v,.82,.05,.05,.5);y=bezier(v,.15,-.05,.43,.5);}else{const v=(t-.5)*2;x=bezier(v,.5,.99,.97,.18);y=bezier(v,.5,.56,1.08,.86);}const h=Math.min(height*.52,width*.60);return {x:(width<=700?width*.5:width*.69)+(x-.5)*h*.70,y:(width<=700?height*.29:height*.38)+(y-.5)*h};}
 function sMix(now){if(staticShape)return 1;if(!shapeStart)return 0;const elapsed=now-shapeStart;if(elapsed<850)return smooth(elapsed/850);if(elapsed<2100)return 1;if(elapsed<3700)return 1-smooth((elapsed-2100)/1600);shapeStart=0;canvas.dataset.shape='world';status.textContent='星点已回到世界星图。';return 0;}
-function draw(now,dt){if(scrollDirty)updateScroll();ctx.fillStyle='#0b131b';ctx.fillRect(0,0,width,height);const active=motionEnabled();const sec=active?now*.001:0;const mix=sMix(now);const p=active?smooth(progress):0;const worldAlpha=1-progress*.80;const pointerAge=now-pointer.at;const nearPointer=pointerAge<2400;const pointerStrength=nearPointer?1-clamp((pointerAge-350)/2050):0;
- for(const [backgroundIndex,star] of background.entries()){if(width<=700&&backgroundIndex%2)continue;const drift=active?Math.sin(sec*.10+star.phase)*2:0;const x=star.u*width+drift,y=star.v*height+drift*.6;ctx.globalAlpha=star.alpha*(1-progress*.65)*(1-mix*.65);ctx.fillStyle='#becdd9';ctx.beginPath();ctx.arc(x,y,star.r,0,Math.PI*2);ctx.fill();if(star.cross){ctx.strokeStyle='#d1dce3';ctx.lineWidth=.5;ctx.globalAlpha*=.45;ctx.beginPath();ctx.moveTo(x-3,y);ctx.lineTo(x+3,y);ctx.moveTo(x,y-3);ctx.lineTo(x,y+3);ctx.stroke();}}
+function draw(now,dt){if(scrollDirty)updateScroll();ctx.fillStyle='#0b131b';ctx.fillRect(0,0,width,height);const active=motionEnabled();const sec=active?now*.001:0;const mix=sMix(now);const worldAlpha=1-progress;const pointerAge=now-pointer.at;const nearPointer=pointerAge<2400;const pointerStrength=nearPointer?1-clamp((pointerAge-350)/2050):0;
+ // The same stars move towards the margins as the world map recedes.
+ const blend=smooth(progress),gutter=width<=700?14:Math.min(62,width*.05);
+ for(const [backgroundIndex,star] of background.entries()){
+  if(width<=700&&backgroundIndex%3)continue;
+  const drift=active?Math.sin(sec*.10+star.phase)*1.5:0;
+  const edgeX=star.u<.5?4+star.u*2*(gutter-4):width-4-(1-star.u)*2*(gutter-4);
+  const x=lerp(star.u*width,edgeX,blend)+drift*(1-blend*.6),y=star.v*height+drift*.6;
+  ctx.globalAlpha=star.alpha*(1-blend*.18)*(backgroundIndex%2===0?1:1-blend)*(1-mix*.65);ctx.fillStyle='#becdd9';ctx.beginPath();ctx.arc(x,y,star.r,0,Math.PI*2);ctx.fill();
+  if(star.cross){ctx.strokeStyle='#d1dce3';ctx.lineWidth=.5;ctx.globalAlpha*=.45;ctx.beginPath();ctx.moveTo(x-2.5,y);ctx.lineTo(x+2.5,y);ctx.moveTo(x,y-2.5);ctx.lineTo(x,y+2.5);ctx.stroke();}
+ }
+ if(progress>=1&&mix===0){ctx.globalAlpha=1;return;}
  points.forEach((point,i)=>{const baseX=layout.x+point.u/1000*layout.w,baseY=layout.y+point.v/480*layout.h;const distance=Math.hypot(baseX-pointer.x,baseY-pointer.y);const range=width<=700?95:145;const targetEnergy=pointerStrength*smooth(1-distance/range);point.energy=active?lerp(point.energy,targetEnergy,Math.min(1,dt*.0045)):targetEnergy;const drift=active?Math.sin(sec*.20+point.phase)*2:0;const loosen=(1-point.energy*.90)*(1-mix);let tx=baseX+(point.jx+drift)*loosen,ty=baseY+(point.jy+drift*.6)*loosen;
   if(point.energy>.02){tx+=(pointer.x-baseX)*.025*point.energy;ty+=(pointer.y-baseY)*.025*point.energy;}
   if(mix>0){const sp=sPosition(point.s);tx=lerp(tx,sp.x+(point.jx*.30),mix);ty=lerp(ty,sp.y+(point.jy*.30),mix);}
-  if(p>0&&i%13===0){const angle=point.phase;const cx=width<=700?width*.5:width*.26,cy=height*.58;const radius=(width<=700?70:110)*( .35+point.s*.65);tx=lerp(tx,cx+Math.cos(angle)*radius,p);ty=lerp(ty,cy+Math.sin(angle)*radius*.7,p);}
   const ease=active&&dt>0?1-Math.exp(-dt*.005):1;point.x=lerp(point.x,tx,ease);point.y=lerp(point.y,ty,ease);
  });
  ctx.lineWidth=.55;ctx.strokeStyle='#8ba9bf';
- for(const edge of (width<=700?mobileEdges:edges)){const a=points[edge.a],b=points[edge.b];const energy=Math.max(a.energy,b.energy);const copyDim=textAttenuation((a.x+b.x)*.5,(a.y+b.y)*.5);const alpha=(.13+energy*.24)*(1-progress*.85)*(1-mix)*copyDim;if(alpha<.008)continue;ctx.globalAlpha=alpha;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+ for(const edge of (width<=700?mobileEdges:edges)){const a=points[edge.a],b=points[edge.b];const energy=Math.max(a.energy,b.energy);const copyDim=textAttenuation((a.x+b.x)*.5,(a.y+b.y)*.5);const alpha=(.13+energy*.24)*Math.pow(1-progress,2)*(1-mix)*copyDim;if(alpha<.008)continue;ctx.globalAlpha=alpha;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
  if(mix>.01){ctx.globalAlpha=.14*mix;ctx.beginPath();sOrder.forEach(({i},j)=>{const p=points[i];if(j===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y);});ctx.stroke();}
- for(let i=0;i<points.length;i++){if(width<=700&&i%3!==0)continue;const point=points[i];const copyDim=textAttenuation(point.x,point.y);let alpha=point.alpha*(1.03+point.energy*.43)*worldAlpha*copyDim;if(progress>.2&&i%13===0)alpha=Math.max(alpha,.30*p);ctx.globalAlpha=clamp(alpha);ctx.fillStyle=point.energy>.3?'#e5edf0':'#bfccd5';ctx.beginPath();ctx.arc(point.x,point.y,point.r*(1+point.energy*.55),0,Math.PI*2);ctx.fill();}
+ for(let i=0;i<points.length;i++){if(width<=700&&i%3!==0)continue;const point=points[i];const copyDim=textAttenuation(point.x,point.y);let alpha=point.alpha*(1.03+point.energy*.43)*worldAlpha*copyDim;ctx.globalAlpha=clamp(alpha);ctx.fillStyle=point.energy>.3?'#e5edf0':'#bfccd5';ctx.beginPath();ctx.arc(point.x,point.y,point.r*(1+point.energy*.55),0,Math.PI*2);ctx.fill();}
  drawDust(now);ctx.globalAlpha=1;
 }
 function tick(now){frame=0;if(!visible||document.hidden)return;const dt=Math.min(40,now-(last||now));last=now;draw(now,dt);if(motionEnabled())frame=requestAnimationFrame(tick);}
@@ -93,6 +102,6 @@ document.getElementById('constellation-mark').addEventListener('click',()=>{poin
 function syncMotion(){const enabled=motionEnabled();stage.classList.toggle('sky-static',!enabled);if(!enabled){dust.length=0;cancelAnimationFrame(frame);frame=0;shapeStart=0;staticShape=false;clearTimeout(shapeTimer);canvas.dataset.shape='world';draw(performance.now(),0);}else schedule();}
 new MutationObserver(syncMotion).observe(document.documentElement,{attributes:true,attributeFilter:['data-motion']});reduced.addEventListener('change',syncMotion);
 document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;last=0;}else schedule();});
-if('IntersectionObserver' in window){new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(!visible){updateScroll();cancelAnimationFrame(frame);frame=0;}else schedule();},{threshold:0}).observe(stage);}
+// The field continues after the cover; document visibility still pauses drawing.
 canvas.dataset.shape='world';size();syncMotion();
 })();
