@@ -139,3 +139,36 @@
 .single-page>.star-layer{z-index:-1;opacity:1;clip-path:none}
 .single-page #night-stage,.single-page .inline-project,.single-page .single-profile,.single-page .single-contact,.single-page .home-footer{background:transparent}
 .single-page #about-me summary:focus-visible{outline:2px solid #98b0c1;outline-offset:5px}
+
+/* Graduation portrait introduces the person immediately after the cover. */
+.about-profile-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:45px;align-items:start}
+.about-profile-portrait{margin:0;border:1px solid #34444f;border-radius:7px;background:#162630;overflow:hidden;aspect-ratio:3/4}
+.about-profile-portrait img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 35%;filter:none;mask-image:none}
+.about-profile-copy{min-width:0}
+.about-profile-intro{font-size:15px;line-height:1.9;margin:0 0 24px;color:#c2d1db;max-width:650px}
+.about-profile-copy .detail-section{margin-bottom:25px}
+.about-profile-copy .detail-section:last-child{margin-bottom:0}
+.about-profile-copy .detail-section-heading{margin-bottom:13px;gap:10px}
+.about-profile-copy .detail-section-heading h2{font-size:19px}
+.single-profile .about-profile-copy .career-record{padding:20px 22px}
+.about-profile-copy .record-heading{flex-wrap:wrap;gap:5px 15px}
+.about-profile-copy .record-heading h3{font-size:18px}
+.about-profile-copy .career-record>p:not(.record-role){font-size:13px;line-height:1.85;margin:10px 0}
+.single-profile .about-profile-copy .education-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;padding:20px 22px}
+.about-profile-copy .education-item{padding:0!important;min-width:0;border:0}
+.about-profile-copy .education-school{display:block}
+.about-profile-copy .education-school b{font-size:16px;line-height:1.65;display:block}
+.about-profile-copy .education-school em{display:inline-block;margin-top:6px}
+.about-profile-copy .education-degree{margin-top:12px}
+.about-profile-copy .education-degree b{font-size:13px}
+.about-profile-copy .education-degree small{font-size:10px;line-height:1.7}
+.about-profile-copy .course-details{font-size:11px;margin-top:12px}
+@media(min-width:1500px){.about-profile-layout{gap:55px}}
+@media(max-width:950px) and (min-width:701px){.about-profile-layout{gap:28px;grid-template-columns:minmax(0,1fr) minmax(0,1.7fr)}.single-profile .about-profile-copy .education-details{grid-template-columns:1fr;gap:20px}.about-profile-portrait{aspect-ratio:3/4}}
+@media(max-width:700px){.about-profile-layout{grid-template-columns:1fr;gap:25px}.about-profile-portrait{width:min(100%,300px);height:340px;aspect-ratio:auto;margin:0 auto}.about-profile-portrait img{object-position:50% 0}.about-profile-intro{font-size:14px;margin-bottom:23px}.single-profile .about-profile-copy .education-details{grid-template-columns:1fr;gap:22px;padding:20px}.single-profile .about-profile-copy .career-record{padding:20px}.about-profile-copy .education-item+.education-item{border-top:1px solid #34444f;padding-top:20px!important}.about-profile-copy .detail-section-heading h2{font-size:19px}}
+@media(max-width:360px){.about-profile-portrait{width:min(100%,270px);height:310px}}
+
+.single-profile .about-profile-copy .detail-heading{padding:0 0 18px;margin-bottom:18px}
+.about-profile-copy .detail-heading .eyebrow{margin:0 0 8px}
+.single-profile .about-profile-copy .detail-heading h2{font-size:32px;margin:0}
+@media(max-width:700px){.single-profile .about-profile-copy .detail-heading h2{font-size:29px}}
