@@ -218,8 +218,10 @@
 
 /* A short transfer of light follows the existing task rail; no new control. */
 .step-tabs{position:relative}
-.step-transfer{position:absolute;left:0;bottom:0;width:4px;height:4px;pointer-events:none;background:#d7e9f3;border-radius:50%;opacity:0;z-index:2}
-.task-handoff.transfer-arrival{animation:handoff-arrival 800ms ease-out both}
+.step-transfer{position:absolute;left:0;bottom:0;width:6px;height:6px;pointer-events:none;box-shadow:0 0 7px #afdaf088;background:#edf8ff;border-radius:50%;opacity:0;z-index:2}
+.task-handoff.transfer-arrival{animation:handoff-arrival 1200ms ease-out both}
 @keyframes handoff-arrival{0%{border-top-color:#d3e8f3;background:#25485c}100%{border-top-color:#658a9f;background:#1b3444}}
 @media(prefers-reduced-motion:reduce){.step-transfer{display:none!important}.task-handoff.transfer-arrival{animation:none!important}}
 html[data-motion=off] .step-transfer{display:none!important}
+
+.single-page>.star-layer.reading-field:after{opacity:.15}

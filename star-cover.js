@@ -67,24 +67,24 @@ function drawDust(now){if(!motionEnabled())return;for(let i=dust.length-1;i>=0;i
 }
 function motionEnabled(){return !reduced.matches&&document.documentElement.dataset.motion!=='off';}
 function size(){width=window.innerWidth;height=window.innerHeight;dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);const mobile=width<=700;let w=mobile?width*1.12:Math.min(width*.87,1550);if(!mobile)w=Math.min(w,height*.72/0.48);layout={x:mobile?(width-w)*.5:width-w-width*.035,y:mobile?Math.max(96,height*.12):height*.14,w,h:w*.48};updateScroll();points.forEach(p=>{p.x=layout.x+p.u/1000*layout.w;p.y=layout.y+p.v/480*layout.h;});draw(performance.now(),0);schedule();}
-function updateScroll(){const rect=stage.getBoundingClientRect();progress=clamp(-rect.top/(height*.92));stage.classList.toggle('bridge-visible',progress>.42);canvas.dataset.scene=progress>=.99?'field':progress>.05?'transition':'world';scrollOffset=window.scrollY;guideLines=guideSelectors.map(selector=>document.querySelector(selector)).filter(Boolean).map(el=>{const r=el.getBoundingClientRect();return {x:r.left,y:el.matches('.about-profile-heading')?r.bottom:r.top,w:r.width};});scrollDirty=false;}
+function updateScroll(){const rect=stage.getBoundingClientRect();progress=clamp(-rect.top/(height*.92));stage.classList.toggle('bridge-visible',progress>.42);canvas.dataset.scene=progress>=.99?'field':progress>.05?'transition':'world';canvas.parentElement.classList.toggle('reading-field',progress>.9);scrollOffset=window.scrollY;guideLines=guideSelectors.map(selector=>document.querySelector(selector)).filter(Boolean).map(el=>{const r=el.getBoundingClientRect();return {x:r.left,y:el.matches('.about-profile-heading')?r.bottom:r.top,w:r.width};});scrollDirty=false;}
 function bezier(t,a,b,c,d){const v=1-t;return v*v*v*a+3*v*v*t*b+3*v*t*t*c+t*t*t*d;}
 function sPosition(t){let x,y;if(t<.5){const v=t*2;x=bezier(v,.82,.05,.05,.5);y=bezier(v,.15,-.05,.43,.5);}else{const v=(t-.5)*2;x=bezier(v,.5,.99,.97,.18);y=bezier(v,.5,.56,1.08,.86);}const h=Math.min(height*.52,width*.60);return {x:(width<=700?width*.5:width*.69)+(x-.5)*h*.70,y:(width<=700?height*.29:height*.38)+(y-.5)*h};}
 function sMix(now){if(staticShape)return 1;if(!shapeStart)return 0;const elapsed=now-shapeStart;if(elapsed<850)return smooth(elapsed/850);if(elapsed<2100)return 1;if(elapsed<3700)return 1-smooth((elapsed-2100)/1600);shapeStart=0;canvas.dataset.shape='world';status.textContent='星点已回到世界星图。';return 0;}
 function drawGuide(now,blend){
  if(!motionEnabled()||blend<.75)return;
  const age=now-lastScrollAt;
- if(age>1800)return;
+ if(age>3200)return;
  const candidates=guideLines.filter(line=>line.y>25&&line.y<height-25);
  const line=candidates.sort((a,b)=>Math.abs(a.y-height*.6)-Math.abs(b.y-height*.6))[0];
  if(!line)return;
- const t=clamp((height*.86-line.y)/(height*.72));
- const alpha=.5*(1-smooth(age/1800))*Math.sin(Math.PI*t);
+ const t=clamp((height*.86-line.y)/(height*.72)+age/3200*.12);
+ const alpha=.95*(1-smooth(age/3200))*(.35+.65*Math.sin(Math.PI*t));
  if(alpha<.01)return;
- const x=line.x+line.w*t,y=line.y;
- const trail=ctx.createLinearGradient(x-24,y,x,y);trail.addColorStop(0,'rgba(166,199,219,0)');trail.addColorStop(1,'rgba(166,199,219,.6)');
- ctx.globalAlpha=alpha;ctx.strokeStyle=trail;ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(x-24,y);ctx.lineTo(x,y);ctx.stroke();
- ctx.fillStyle='#d7e8f1';ctx.beginPath();ctx.arc(x,y,1.3,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ const x=line.x+line.w*t,y=line.y-1;
+ const trail=ctx.createLinearGradient(x-78,y,x,y);trail.addColorStop(0,'rgba(166,199,219,0)');trail.addColorStop(1,'rgba(190,220,238,.9)');
+ ctx.globalAlpha=alpha;ctx.strokeStyle=trail;ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(x-78,y);ctx.lineTo(x,y);ctx.stroke();
+ ctx.fillStyle='#e4f3fc';ctx.beginPath();ctx.arc(x,y,2.2,0,Math.PI*2);ctx.fill();ctx.globalAlpha=alpha*.12;ctx.beginPath();ctx.arc(x,y,6,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
 }
 function draw(now,dt){if(scrollDirty)updateScroll();ctx.fillStyle='#0b131b';ctx.fillRect(0,0,width,height);const active=motionEnabled();const sec=active?now*.001:0;const mix=sMix(now);const worldAlpha=1-progress;const pointerAge=now-pointer.at;const nearPointer=pointerAge<2400;const pointerStrength=nearPointer?1-clamp((pointerAge-350)/2050):0;
  // The world recedes into a balanced field with very slight depth parallax.
@@ -95,8 +95,8 @@ function draw(now,dt){if(scrollDirty)updateScroll();ctx.fillStyle='#0b131b';ctx.
   const fieldY=((star.fieldV*height-scrollOffset*(active?star.depth*.025:0))%height+height)%height;
   const x=lerp(star.u*width,star.fieldU*width,blend)+drift;
   const y=lerp(star.v*height,fieldY,blend)+drift*.6;
-  const retained=backgroundIndex%3===0?1:1-blend;
-  ctx.globalAlpha=star.alpha*(1-blend*.55)*retained*(1-mix*.65);ctx.fillStyle='#becdd9';ctx.beginPath();ctx.arc(x,y,star.r*(1-blend*.12),0,Math.PI*2);ctx.fill();
+  const retained=backgroundIndex%2===0?1:1-blend;
+  ctx.globalAlpha=star.alpha*(1+blend*.08)*retained*(1-mix*.65);ctx.fillStyle='#becdd9';ctx.beginPath();ctx.arc(x,y,star.r*(1+blend*.65),0,Math.PI*2);ctx.fill();
   if(star.cross){ctx.strokeStyle='#d1dce3';ctx.lineWidth=.5;ctx.globalAlpha*=.45;ctx.beginPath();ctx.moveTo(x-2.5,y);ctx.lineTo(x+2.5,y);ctx.moveTo(x,y-2.5);ctx.lineTo(x,y+2.5);ctx.stroke();}
  }
  drawGuide(now,blend);

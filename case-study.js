@@ -28,7 +28,7 @@ function showTransfer(from,to){
  if(!dot){dot=document.createElement('span');dot.className='step-transfer';dot.setAttribute('aria-hidden','true');tabs.append(dot);}
  const a=$('step-tab-'+from),b=$('step-tab-'+to);
  const x=a.offsetLeft+a.offsetWidth*.5,y=b.offsetLeft+b.offsetWidth*.5;
- transferAnimation=dot.animate([{transform:`translateX(${x}px)`,opacity:0},{opacity:.85,offset:.15},{opacity:.85,offset:.8},{transform:`translateX(${y}px)`,opacity:0}],{duration:650,easing:'cubic-bezier(.25,.6,.3,1)'});
+ transferAnimation=dot.animate([{transform:`translateX(${x}px)`,opacity:0},{opacity:.85,offset:.15},{opacity:.85,offset:.8},{transform:`translateX(${y}px)`,opacity:0}],{duration:1050,easing:'cubic-bezier(.25,.6,.3,1)'});
  if(to>0){const target=$('handoff-'+to);void target.offsetWidth;target.classList.add('transfer-arrival');}
 }
 new MutationObserver(()=>{if(document.documentElement.dataset.motion==='off')stopTransfer();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-motion']});
