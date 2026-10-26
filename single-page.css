@@ -132,8 +132,8 @@
 .single-page .portal-contact .portal-label b{font-size:14px}
 .single-page .portal-contact .portal-label small{font-size:8px}
 @media(min-width:1600px){.single-page .portal-projects .portal-label b,.single-page .portal-personal .portal-label b{font-size:24px}.single-page .portal-tools .portal-label b{font-size:20px}.single-page .portal-contact .portal-label b{font-size:16px}}
-@media(max-width:700px){.single-page .portal-projects .portal-label b,.single-page .portal-personal .portal-label b{font-size:18px}.single-page .portal-projects .portal-label small,.single-page .portal-personal .portal-label small{font-size:9px}.single-page .portal-tools .portal-label b{font-size:15px}.single-page .portal-tools .portal-label small{font-size:8px}.single-page .portal-contact .portal-label b{font-size:12px}.single-page .portal-contact .portal-label small{font-size:7px}.single-page .portal-personal .portal-label{opacity:1}}
-@media(max-width:360px){.single-page .portal-projects .portal-label b,.single-page .portal-personal .portal-label b{font-size:17px}.single-page .portal-tools .portal-label b{font-size:14px}}
+@media(max-width:700px){.single-page .portal-projects .portal-label b,.single-page .portal-personal .portal-label b{font-size:18px}.single-page .portal-projects .portal-label small,.single-page .portal-personal .portal-label small{font-size:9px}.single-page .portal-tools .portal-label b,.single-page .portal-contact .portal-label b{font-size:18px}.single-page .portal-tools .portal-label small,.single-page .portal-contact .portal-label small{font-size:9px}.single-page .portal-personal .portal-label{opacity:1}}
+@media(max-width:360px){.single-page .portal-projects .portal-label b,.single-page .portal-personal .portal-label b{font-size:17px}.single-page .portal-tools .portal-label b,.single-page .portal-contact .portal-label b{font-size:17px}}
 /* One persistent sky: map on the cover, sparse stars only in the page gutters. */
 .single-page{isolation:isolate}
 .single-page>.star-layer{z-index:-1;opacity:1;clip-path:none}
@@ -178,5 +178,7 @@
 @media(min-width:701px){
   .about-profile-layout{align-items:stretch}
   .about-profile-portrait{position:relative;aspect-ratio:auto;min-height:0}
-  .about-profile-portrait img{position:absolute;inset:0;object-position:50% 50%}
+  .about-profile-portrait img{position:absolute;inset:0;object-position:50% 0}
 }
+
+.single-profile .about-profile-heading .about-profile-intro{margin:14px 0 0;max-width:none}
