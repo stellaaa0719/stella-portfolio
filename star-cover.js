@@ -57,7 +57,7 @@ let layout={x:0,y:0,w:0,h:0};
 const pointer={x:-10000,y:-10000,at:-10000,down:false};
 let scrollOffset=0,lastScrollAt=-10000;
 let guideLines=[];
-const guideSelectors=['.about-profile-heading','#case .role-strip','#tools dl>div:first-child','#contact'];
+const guideSelectors=['.about-profile-heading','#experience','#tools dl>div:first-child','#contact'];
 const portals=[...document.querySelectorAll('.star-portal')];
 const dust=[];let lastDust=0;
 function textAttenuation(x,y){if(width<=700)return 1;const dx=(x-width*.5)/(width*.28),dy=(y-height*.65)/(height*.27);return .27+.73*smooth(Math.hypot(dx,dy));}

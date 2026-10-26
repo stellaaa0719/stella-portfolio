@@ -225,3 +225,9 @@
 html[data-motion=off] .step-transfer{display:none!important}
 
 .single-page>.star-layer.reading-field:after{opacity:.15}
+
+/* Keep responsibilities with the introduction, before the main actions. */
+.single-page #case .role-strip{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 14px;border:0;padding:0;margin:16px 0 0;font-size:12px;line-height:1.9}
+.single-page #case .role-strip small{font-size:11px;white-space:nowrap}
+.single-page #case .actions{margin-top:22px;margin-bottom:0}
+@media(max-width:700px){.single-page #case .role-strip{gap:4px 10px;font-size:11px}.single-page #case .role-strip span{flex:1 1 240px}}
