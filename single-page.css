@@ -209,3 +209,6 @@
  .task-handoff dt{margin:0;line-height:1.8}
  .handoff-heading{font-size:12px;line-height:1.6}
 }
+
+/* Only the disclosure icon rotates; the global summary rule also targets text spans. */
+.platform-disclosure[open]>summary>span:not(.platform-expand){transform:none}
