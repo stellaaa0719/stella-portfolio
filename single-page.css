@@ -215,3 +215,11 @@
 
 .single-contact .contact-row [hidden]{display:none!important}
 .contact-placeholder{display:block;color:#9fb0bd;font-size:14px;line-height:1.8}
+
+/* A short transfer of light follows the existing task rail; no new control. */
+.step-tabs{position:relative}
+.step-transfer{position:absolute;left:0;bottom:0;width:4px;height:4px;pointer-events:none;background:#d7e9f3;border-radius:50%;opacity:0;z-index:2}
+.task-handoff.transfer-arrival{animation:handoff-arrival 800ms ease-out both}
+@keyframes handoff-arrival{0%{border-top-color:#d3e8f3;background:#25485c}100%{border-top-color:#658a9f;background:#1b3444}}
+@media(prefers-reduced-motion:reduce){.step-transfer{display:none!important}.task-handoff.transfer-arrival{animation:none!important}}
+html[data-motion=off] .step-transfer{display:none!important}

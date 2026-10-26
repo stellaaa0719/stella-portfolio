@@ -51,9 +51,13 @@ points.forEach((p,i)=>{if(i%3!==0)return;const near=[];points.forEach((q,j)=>{if
 const background=Array.from({length:85},()=>({u:random(),v:random(),r:.30+random()*.72,alpha:.23+random()*.38,phase:random()*6.28,cross:random()<.055}));
 // A loose western star field balances the map without adding more land detail.
 background.push(...Array.from({length:48},()=>({u:.025+random()*.29,v:.16+random()*.74,r:.45+random()*.65,alpha:.38+random()*.32,phase:random()*6.28,cross:random()<.10})));
+background.forEach((star,i)=>{star.fieldU=(((i*47)%background.length)+random()*.7)/background.length;star.fieldV=(i*.61803398875+random()*.08)%1;star.depth=.25+random()*.65;});
 let width=0,height=0,dpr=1,frame=0,last=0,visible=true,progress=0,scrollDirty=true,shapeStart=0,staticShape=false,shapeTimer=0;
 let layout={x:0,y:0,w:0,h:0};
 const pointer={x:-10000,y:-10000,at:-10000,down:false};
+let scrollOffset=0,lastScrollAt=-10000;
+let guideLines=[];
+const guideSelectors=['.about-profile-heading','#case .role-strip','#tools dl>div:first-child','#contact'];
 const portals=[...document.querySelectorAll('.star-portal')];
 const dust=[];let lastDust=0;
 function textAttenuation(x,y){if(width<=700)return 1;const dx=(x-width*.5)/(width*.28),dy=(y-height*.65)/(height*.27);return .27+.73*smooth(Math.hypot(dx,dy));}
@@ -63,21 +67,39 @@ function drawDust(now){if(!motionEnabled())return;for(let i=dust.length-1;i>=0;i
 }
 function motionEnabled(){return !reduced.matches&&document.documentElement.dataset.motion!=='off';}
 function size(){width=window.innerWidth;height=window.innerHeight;dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);const mobile=width<=700;let w=mobile?width*1.12:Math.min(width*.87,1550);if(!mobile)w=Math.min(w,height*.72/0.48);layout={x:mobile?(width-w)*.5:width-w-width*.035,y:mobile?Math.max(96,height*.12):height*.14,w,h:w*.48};updateScroll();points.forEach(p=>{p.x=layout.x+p.u/1000*layout.w;p.y=layout.y+p.v/480*layout.h;});draw(performance.now(),0);schedule();}
-function updateScroll(){const rect=stage.getBoundingClientRect();progress=clamp(-rect.top/(height*.92));stage.classList.toggle('bridge-visible',progress>.42);canvas.dataset.scene=progress>=.99?'field':progress>.05?'transition':'world';scrollDirty=false;}
+function updateScroll(){const rect=stage.getBoundingClientRect();progress=clamp(-rect.top/(height*.92));stage.classList.toggle('bridge-visible',progress>.42);canvas.dataset.scene=progress>=.99?'field':progress>.05?'transition':'world';scrollOffset=window.scrollY;guideLines=guideSelectors.map(selector=>document.querySelector(selector)).filter(Boolean).map(el=>{const r=el.getBoundingClientRect();return {x:r.left,y:el.matches('.about-profile-heading')?r.bottom:r.top,w:r.width};});scrollDirty=false;}
 function bezier(t,a,b,c,d){const v=1-t;return v*v*v*a+3*v*v*t*b+3*v*t*t*c+t*t*t*d;}
 function sPosition(t){let x,y;if(t<.5){const v=t*2;x=bezier(v,.82,.05,.05,.5);y=bezier(v,.15,-.05,.43,.5);}else{const v=(t-.5)*2;x=bezier(v,.5,.99,.97,.18);y=bezier(v,.5,.56,1.08,.86);}const h=Math.min(height*.52,width*.60);return {x:(width<=700?width*.5:width*.69)+(x-.5)*h*.70,y:(width<=700?height*.29:height*.38)+(y-.5)*h};}
 function sMix(now){if(staticShape)return 1;if(!shapeStart)return 0;const elapsed=now-shapeStart;if(elapsed<850)return smooth(elapsed/850);if(elapsed<2100)return 1;if(elapsed<3700)return 1-smooth((elapsed-2100)/1600);shapeStart=0;canvas.dataset.shape='world';status.textContent='星点已回到世界星图。';return 0;}
+function drawGuide(now,blend){
+ if(!motionEnabled()||blend<.75)return;
+ const age=now-lastScrollAt;
+ if(age>1800)return;
+ const candidates=guideLines.filter(line=>line.y>25&&line.y<height-25);
+ const line=candidates.sort((a,b)=>Math.abs(a.y-height*.6)-Math.abs(b.y-height*.6))[0];
+ if(!line)return;
+ const t=clamp((height*.86-line.y)/(height*.72));
+ const alpha=.5*(1-smooth(age/1800))*Math.sin(Math.PI*t);
+ if(alpha<.01)return;
+ const x=line.x+line.w*t,y=line.y;
+ const trail=ctx.createLinearGradient(x-24,y,x,y);trail.addColorStop(0,'rgba(166,199,219,0)');trail.addColorStop(1,'rgba(166,199,219,.6)');
+ ctx.globalAlpha=alpha;ctx.strokeStyle=trail;ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(x-24,y);ctx.lineTo(x,y);ctx.stroke();
+ ctx.fillStyle='#d7e8f1';ctx.beginPath();ctx.arc(x,y,1.3,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+}
 function draw(now,dt){if(scrollDirty)updateScroll();ctx.fillStyle='#0b131b';ctx.fillRect(0,0,width,height);const active=motionEnabled();const sec=active?now*.001:0;const mix=sMix(now);const worldAlpha=1-progress;const pointerAge=now-pointer.at;const nearPointer=pointerAge<2400;const pointerStrength=nearPointer?1-clamp((pointerAge-350)/2050):0;
- // The same stars move towards the margins as the world map recedes.
- const blend=smooth(progress),gutter=width<=700?14:Math.min(62,width*.05);
+ // The world recedes into a balanced field with very slight depth parallax.
+ const blend=smooth(progress);
  for(const [backgroundIndex,star] of background.entries()){
   if(width<=700&&backgroundIndex%3)continue;
   const drift=active?Math.sin(sec*.10+star.phase)*1.5:0;
-  const edgeX=star.u<.5?4+star.u*2*(gutter-4):width-4-(1-star.u)*2*(gutter-4);
-  const x=lerp(star.u*width,edgeX,blend)+drift*(1-blend*.6),y=star.v*height+drift*.6;
-  ctx.globalAlpha=star.alpha*(1-blend*.18)*(backgroundIndex%2===0?1:1-blend)*(1-mix*.65);ctx.fillStyle='#becdd9';ctx.beginPath();ctx.arc(x,y,star.r,0,Math.PI*2);ctx.fill();
+  const fieldY=((star.fieldV*height-scrollOffset*(active?star.depth*.025:0))%height+height)%height;
+  const x=lerp(star.u*width,star.fieldU*width,blend)+drift;
+  const y=lerp(star.v*height,fieldY,blend)+drift*.6;
+  const retained=backgroundIndex%3===0?1:1-blend;
+  ctx.globalAlpha=star.alpha*(1-blend*.55)*retained*(1-mix*.65);ctx.fillStyle='#becdd9';ctx.beginPath();ctx.arc(x,y,star.r*(1-blend*.12),0,Math.PI*2);ctx.fill();
   if(star.cross){ctx.strokeStyle='#d1dce3';ctx.lineWidth=.5;ctx.globalAlpha*=.45;ctx.beginPath();ctx.moveTo(x-2.5,y);ctx.lineTo(x+2.5,y);ctx.moveTo(x,y-2.5);ctx.lineTo(x,y+2.5);ctx.stroke();}
  }
+ drawGuide(now,blend);
  if(progress>=1&&mix===0){ctx.globalAlpha=1;return;}
  points.forEach((point,i)=>{const baseX=layout.x+point.u/1000*layout.w,baseY=layout.y+point.v/480*layout.h;const distance=Math.hypot(baseX-pointer.x,baseY-pointer.y);const range=width<=700?95:145;const targetEnergy=pointerStrength*smooth(1-distance/range);point.energy=active?lerp(point.energy,targetEnergy,Math.min(1,dt*.0045)):targetEnergy;const drift=active?Math.sin(sec*.20+point.phase)*2:0;const loosen=(1-point.energy*.90)*(1-mix);let tx=baseX+(point.jx+drift)*loosen,ty=baseY+(point.jy+drift*.6)*loosen;
   if(point.energy>.02){tx+=(pointer.x-baseX)*.025*point.energy;ty+=(pointer.y-baseY)*.025*point.energy;}
@@ -96,7 +118,8 @@ function pointerEvent(event,burst=false){pointer.x=event.clientX;pointer.y=event
 hero.addEventListener('pointermove',event=>{if(event.pointerType==='mouse')pointerEvent(event);},{passive:true});
 hero.addEventListener('pointerdown',event=>pointerEvent(event,true),{passive:true});
 hero.addEventListener('pointerleave',()=>{pointer.at=Math.min(pointer.at,performance.now()-600);portals.forEach(el=>el.classList.remove('is-near'));},{passive:true});
-window.addEventListener('scroll',()=>{scrollDirty=true;if(!motionEnabled()){updateScroll();draw(performance.now(),0);}else schedule();},{passive:true});
+window.addEventListener('scroll',()=>{lastScrollAt=performance.now();scrollDirty=true;if(!motionEnabled()){updateScroll();draw(performance.now(),0);}else schedule();},{passive:true});
+document.addEventListener('toggle',()=>{scrollDirty=true;schedule();},true);
 let resizeFrame=0;window.addEventListener('resize',()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(size);},{passive:true});
 document.getElementById('constellation-mark').addEventListener('click',()=>{pointer.at=-10000;clearTimeout(shapeTimer);status.textContent='星点汇聚为字母 S，随后回到世界星图。';canvas.dataset.shape='s';if(motionEnabled()){shapeStart=performance.now();staticShape=false;schedule();}else{staticShape=true;draw(performance.now(),0);shapeTimer=setTimeout(()=>{staticShape=false;canvas.dataset.shape='world';status.textContent='星点已回到世界星图。';draw(performance.now(),0);},1700);}});
 function syncMotion(){const enabled=motionEnabled();stage.classList.toggle('sky-static',!enabled);if(!enabled){dust.length=0;cancelAnimationFrame(frame);frame=0;shapeStart=0;staticShape=false;clearTimeout(shapeTimer);canvas.dataset.shape='world';draw(performance.now(),0);}else schedule();}

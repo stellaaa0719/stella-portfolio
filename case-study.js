@@ -17,7 +17,23 @@ function announce(text){$('demo-status').textContent=text;}
 function pulse(el){el.classList.remove('is-changed');void el.offsetWidth;el.classList.add('is-changed');}
 function stopTour(){if(state.tour!==null){state.tour=null;renderTour();}}
 function bindTabs(buttons,select){buttons.forEach((b,i)=>{b.addEventListener('click',()=>select(i));b.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const n=buttons.length;const j=e.key==='Home'?0:e.key==='End'?n-1:(i+(e.key==='ArrowLeft'?-1:1)+n)%n;select(j);buttons[j].focus();});});}
-function selectStep(i,{manual=true}={}){if(manual)stopTour();state.step=i;renderSteps();if(i===2&&state.confirmed){renderMaterial();pulse($('material-state'));}announce(['选择情报并查看依据；来源置信度与业务相关性分别呈现。','选择客户反馈，核对草稿后再确认。',state.confirmed?'已复用确认记录。点击正文依据标识，或演示改写。':'材料等待确认信息。请先在商机跟进中确认客户反馈。'][i]);}
+let transferAnimation=null;
+function stopTransfer(){if(transferAnimation)transferAnimation.cancel();transferAnimation=null;document.querySelectorAll('.transfer-arrival').forEach(el=>el.classList.remove('transfer-arrival'));}
+function showTransfer(from,to){
+ stopTransfer();
+ if(to<=from||window.matchMedia('(prefers-reduced-motion: reduce)').matches||document.documentElement.dataset.motion==='off')return;
+ if((to===2&&!state.confirmed)||(to===1&&state.signal==='bid'))return;
+ const tabs=document.querySelector('.step-tabs');
+ let dot=tabs.querySelector('.step-transfer');
+ if(!dot){dot=document.createElement('span');dot.className='step-transfer';dot.setAttribute('aria-hidden','true');tabs.append(dot);}
+ const a=$('step-tab-'+from),b=$('step-tab-'+to);
+ const x=a.offsetLeft+a.offsetWidth*.5,y=b.offsetLeft+b.offsetWidth*.5;
+ transferAnimation=dot.animate([{transform:`translateX(${x}px)`,opacity:0},{opacity:.85,offset:.15},{opacity:.85,offset:.8},{transform:`translateX(${y}px)`,opacity:0}],{duration:650,easing:'cubic-bezier(.25,.6,.3,1)'});
+ if(to>0){const target=$('handoff-'+to);void target.offsetWidth;target.classList.add('transfer-arrival');}
+}
+new MutationObserver(()=>{if(document.documentElement.dataset.motion==='off')stopTransfer();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-motion']});
+window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',stopTransfer);
+function selectStep(i,{manual=true}={}){const previous=state.step;if(manual)stopTour();state.step=i;renderSteps();showTransfer(previous,i);if(i===2&&state.confirmed){renderMaterial();pulse($('material-state'));}announce(['选择情报并查看依据；来源置信度与业务相关性分别呈现。','选择客户反馈，核对草稿后再确认。',state.confirmed?'已复用确认记录。点击正文依据标识，或演示改写。':'材料等待确认信息。请先在商机跟进中确认客户反馈。'][i]);}
 function renderHandoffs(){
  const c=state.confirmed&&feedback[state.confirmed];
  const item=signals.find(x=>x.id===(state.confirmedSignal||state.signal));
@@ -52,7 +68,7 @@ function renderMaterial(){const c=state.confirmed&&feedback[state.confirmed];$('
  $('document-context').textContent=content;$('rewrite-block').hidden=hold||state.chapter!==1;renderParagraph();renderDocSource();}
 function renderParagraph(){const paragraph=$('document-paragraph');paragraph.replaceChildren();if(!state.rewritten){paragraph.textContent='通过数字化转型提升园区运营效率，推动物流业务协同与高质量发展。';}else{const old=document.createElement('s');old.textContent='原句：通过数字化转型提升园区运营效率。';const mark=document.createElement('mark');mark.textContent=state.confirmed==='visit'?'先访谈园区运营与信息化负责人，收集系统清单和典型作业流程，形成待核实问题清单；据此讨论咨询范围与后续诊断安排。':'选取入库、出库与运输衔接环节，核实重复录入和数据断点；形成系统清单、数据流转图与问题优先级。';paragraph.append(old,mark,document.createTextNode(' 具体系统建设范围另行论证。'));}$('rewrite-paragraph').textContent=state.rewritten?'重看改写前文本 ↺':'演示改写这一段 ↗';$('rewrite-note').textContent=state.rewritten?'高亮为替换内容：明确动作与成果，保留待确认边界。':'点击查看局部替换；无需等待生成。';}
 function renderDocSource(){document.querySelectorAll('[data-document-source]').forEach(b=>{const active=b.dataset.documentSource===state.docSource;b.classList.toggle('is-highlighted',active);b.setAttribute('aria-pressed',String(active));});const c=state.confirmed&&feedback[state.confirmed];$('source-inspector').textContent=state.docSource==='policy'?'① 政策原文：“深化各类信息系统集成应用”“推动系统衔接、数据交换。”（第 5、7 页）':state.docSource==='feedback'&&c?'② 已确认沟通：“'+c.quote+'” 下一步：'+c.action:'';}
-function reset({tour=false}={}){state=initial();document.querySelector('.customer-context').classList.remove('context-expanded');$('toggle-context').setAttribute('aria-expanded','false');$('toggle-context').textContent='展开背景 ＋';renderSignals();renderIntel();renderSteps();renderFollowup();renderContext();renderMaterial();renderTour();$('demo-shell').classList.remove('collected');void $('demo-shell').offsetWidth;$('demo-shell').classList.add('collected');announce('演示已重置：客户反馈、确认记录及改写已清空。');if(tour){state.tour=0;renderTour();}}
+function reset({tour=false}={}){stopTransfer();state=initial();document.querySelector('.customer-context').classList.remove('context-expanded');$('toggle-context').setAttribute('aria-expanded','false');$('toggle-context').textContent='展开背景 ＋';renderSignals();renderIntel();renderSteps();renderFollowup();renderContext();renderMaterial();renderTour();$('demo-shell').classList.remove('collected');void $('demo-shell').offsetWidth;$('demo-shell').classList.add('collected');announce('演示已重置：客户反馈、确认记录及改写已清空。');if(tour){state.tour=0;renderTour();}}
 const tourCopy=['1 / 6 · 预设信息已进入收件箱。下一步筛选高置信来源。','2 / 6 · 来源优先级已筛选。下一步查看政策与能力依据。','3 / 6 · 依据已联动。下一步选择客户反馈。','4 / 6 · 已选择“先梳理系统与数据”。下一步确认本次记录。','5 / 6 · 客户背景已更新。下一步进入材料工作台。','6 / 6 · 背景已复用。下一步查看正文改写。','体验完成 · 同一条线索已形成有依据的材料。可自由切换、重播或重置。'];
 function renderTour(){$('tour-bar').hidden=state.tour===null;if(state.tour!==null){$('tour-copy').textContent=tourCopy[state.tour];$('tour-next').textContent=['筛选来源','查看依据','选择示例反馈','确认本次跟进','进入材料','查看改写','重播体验'][state.tour];$('tour-skip').hidden=state.tour===6;}}
 function advanceTour(){const t=state.tour;if(t===6){reset({tour:true});return;}if(t===0){state.filtered=true;renderSignals();}if(t===1)showEvidence();if(t===2){selectStep(1,{manual:false});chooseFeedback('diagnose',{manual:false});}if(t===3)confirmFeedback();if(t===4)selectStep(2,{manual:false});if(t===5){state.rewritten=true;renderParagraph();pulse($('document-paragraph'));}state.tour=t+1;renderTour();}
