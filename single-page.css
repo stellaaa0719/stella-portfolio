@@ -212,3 +212,6 @@
 
 /* Only the disclosure icon rotates; the global summary rule also targets text spans. */
 .platform-disclosure[open]>summary>span:not(.platform-expand){transform:none}
+
+.single-contact .contact-row [hidden]{display:none!important}
+.contact-placeholder{display:block;color:#9fb0bd;font-size:14px;line-height:1.8}
