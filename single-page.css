@@ -182,3 +182,30 @@
 }
 
 .single-profile .about-profile-heading .about-profile-intro{margin:14px 0 0;max-width:none}
+
+/* Product demo comes first; the full platform stays available on demand. */
+.platform-section{padding-top:0;padding-bottom:35px}
+.platform-disclosure{margin:0!important}
+.inline-project .platform-disclosure>summary{padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.platform-disclosure summary small{display:block;font-size:10px;letter-spacing:1.2px;color:#9eb5c4;margin-bottom:7px}
+.platform-disclosure summary b{display:block;font-size:17px;font-weight:500}
+.platform-disclosure .platform-map{border:0;border-top:1px solid #344956;border-radius:0}
+.platform-disclosure[open] .platform-expand{transform:rotate(45deg)}
+#demo-shell{scroll-margin-top:20px}
+.task-handoff{padding:16px 18px;border:1px solid #658a9f;border-left:3px solid #a6cee2;border-radius:7px;background:#1b3444;margin:0 0 24px}
+.task-handoff[hidden]{display:none}
+.handoff-heading{display:flex;gap:9px;align-items:center;color:#d9edf7;font-size:13px}
+.handoff-heading>span{font-size:22px;color:#b8d9e9}
+.task-handoff dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:12px 0 0}
+.task-handoff dt{font-size:10px;color:#a8c4d5;margin-bottom:5px}
+.task-handoff dd{margin:0;font-size:12px;line-height:1.7;color:#dfebf2;overflow-wrap:anywhere}
+.about-profile-portrait picture{display:block;width:100%;height:100%}
+@media(max-width:700px){
+ .inline-project .platform-disclosure>summary{padding:16px}
+ .platform-disclosure summary b{font-size:14px}
+ .task-handoff{padding:13px;margin-bottom:18px}
+ .task-handoff dl{grid-template-columns:1fr;gap:8px}
+ .task-handoff dl>div{display:grid;grid-template-columns:68px minmax(0,1fr);gap:8px}
+ .task-handoff dt{margin:0;line-height:1.8}
+ .handoff-heading{font-size:12px;line-height:1.6}
+}
