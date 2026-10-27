@@ -231,3 +231,19 @@ html[data-motion=off] .step-transfer{display:none!important}
 .single-page #case .role-strip small{font-size:11px;white-space:nowrap}
 .single-page #case .actions{margin-top:22px;margin-bottom:0}
 @media(max-width:700px){.single-page #case .role-strip{gap:4px 10px;font-size:11px}.single-page #case .role-strip span{flex:1 1 240px}}
+
+/* One unobtrusive hint per task, with no overlay and no forced selection. */
+.experience-intro{font-size:15px;line-height:1.9;color:#b6cad7;max-width:920px;margin:-8px 0 25px}
+.light-help{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px 26px;border-bottom:1px solid #54788f;background:#1a3547;color:#dcebf4}
+.light-help[hidden],.light-help [hidden]{display:none!important}
+.light-help-copy{min-width:0}
+.light-help-copy>small{display:block;font-size:10px;color:#a8ccdf;letter-spacing:.7px;margin-bottom:7px}
+.light-help-copy>b{display:block;font-size:16px;font-weight:550;line-height:1.6}
+.light-help-copy>p{font-size:12px;line-height:1.8;margin:5px 0 0;max-width:670px;color:#bed0dc}
+.light-help-actions{display:flex;flex-direction:column;align-items:flex-end;gap:9px;flex-shrink:0}
+.light-help-actions .small-solid{font-size:12px}
+.light-help-actions .help-dismiss{border:0;background:transparent;color:#b5c8d6;padding:3px;font-size:11px;text-decoration:underline;text-underline-offset:3px}
+.inline-project .help-target{outline:2px solid #aed6eb;outline-offset:4px;box-shadow:0 0 0 5px #7db9db14}
+@media(max-width:700px){.experience-intro{font-size:13px;margin:0 0 20px}.light-help{display:block;padding:15px 16px}.light-help-copy>b{font-size:14px}.light-help-copy>p{font-size:12px}.light-help-actions{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}.light-help-actions .small-solid{font-size:11px;padding:9px 11px}.light-help-actions .help-dismiss{white-space:nowrap}}
+
+@media(max-width:700px){.inline-project .step-tabs small{display:block;font-size:9px;line-height:1.5;letter-spacing:0;color:#b7cbd8}.inline-project .step-tabs button{gap:5px}}
