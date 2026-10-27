@@ -35,6 +35,9 @@ for required in ['index.html', 'single-page.css', 'star-cover.js', 'assets/stell
         raise SystemExit('Missing website asset: ' + required)
 PY
 
+# Each deployed asset has a content-specific filename; old releases remain compatible.
+python3 scripts/version-static-assets.py "$PORTFOLIO_PACKAGE" --fingerprint-files
+
 umask 077
 printf '%s\n' "$DEPLOY_SSH_KEY" | tr -d '\r' > "$task_dir/key"
 printf '%s %s\n' "$DEPLOY_HOST" "$DEPLOY_HOST_PUBLIC_KEY" > "$task_dir/known_hosts"
