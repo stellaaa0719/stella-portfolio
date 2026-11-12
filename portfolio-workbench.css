@@ -1,0 +1,12 @@
+.single-page .workbench-section{padding-top:38px;padding-bottom:42px}
+.single-page .workbench-section .section-heading{align-items:flex-end;gap:22px}
+.single-page .workbench-section h2{max-width:900px;font-size:clamp(27px,3.4vw,42px);line-height:1.45;letter-spacing:-.7px}
+.single-page .workbench-section .experience-intro{max-width:none;font-size:15px;line-height:1.9;margin:20px 0 28px;color:#a8bdc9}
+.local-demo-tag{font-size:12px;color:#a8bdc9;white-space:nowrap;padding-bottom:5px}
+.workbench-frame-wrap{border:1px solid #3d5667;border-radius:14px;overflow:hidden;background:#f5f7fa;box-shadow:0 18px 60px #0002}
+#platform-demo-frame{display:block;width:100%;border:0;height:820px;background:#f5f7fa}
+.workbench-footnote{display:flex;align-items:baseline;justify-content:space-between;gap:18px;flex-wrap:wrap;font-size:12px;color:#a8bdc9;margin-top:16px;line-height:1.7}
+.workbench-footnote a{color:#b4d4e4;white-space:nowrap;text-decoration:none;border-bottom:1px solid #7897a9;padding:3px 0}
+.workbench-footnote a:hover{color:#e7f2f8}
+.workbench-section:target{scroll-margin-top:24px}
+@media(max-width:700px){.single-page .workbench-section{padding-top:25px;padding-bottom:28px}.single-page .workbench-section .section-heading{display:block}.local-demo-tag{display:block;margin-top:12px}.single-page .workbench-section .experience-intro{font-size:14px;margin:16px 0 22px}.workbench-frame-wrap{border-radius:10px}.workbench-footnote{font-size:11px;gap:7px}#platform-demo-frame{height:900px}}
