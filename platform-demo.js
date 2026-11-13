@@ -17,7 +17,8 @@ const requestedView=new URLSearchParams(location.search).get('view');if(requeste
 const demoCustomers=[{name:'示例物流园区 A',type:'物流园区运营方',need:'仓储、运输系统各自记录订单，同一批货物的状态需要人工核对。',contact:'希望先核实仓运协同与数据问题，再讨论智能化改造路径。'},{name:'示例物流企业 B',type:'物流企业',need:'订单、库存与运输数据口径不统一，经营报表需要人工汇总。',contact:'希望先统一口径，暂未讨论采购安排。'},{name:'示例数据服务机构 C',type:'数据服务机构',need:'希望梳理物流数据共享的业务场景、数据目录与使用边界。',contact:'当前仅有初步需求，具体范围待访谈。'}];
 
 const demoTodos=['约访示例物流园区 A，核实仓运协同与数据断点','核对示例物流企业 B 对关键字段的不同定义','检查物流园区智能化转型诊断建议的初稿与待确认事项'];
-function go(page,scene){state.page=page;state.record=0;if(scene){state.scene=scene;state.sent=false;}render();save();}
+function revealMobile(selector){if(!matchMedia('(max-width:550px)').matches)return;requestAnimationFrame(()=>{const body=q('.aw-body'),target=q(selector);if(!target)return;body.scrollTo({top:selector==='.aw-body'?0:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});}
+function go(page,scene){closeMore();state.page=page;state.record=0;if(scene){state.scene=scene;state.sent=false;}render();save();revealMobile('.aw-body');}
 function action(page,label){return '<button type="button" data-page="'+page+'" class="cursor-interaction">'+label+' →</button>';}
 function fields(items){return items.map(([label,value])=>'<div class="aw-field-row"><span>'+label+'</span><div>'+value+'</div></div>').join('');}
 function taskItems(){return [...demoTodos.map((text,i)=>({id:'base-'+i,text})),...(state.intelAction?[{id:'intelligence',text:'核实演示情报与示例物流园区 A 的需求是否相关'}]:[]),...state.addedTasks];}
@@ -139,6 +140,8 @@ function renderPage(){
  root.querySelectorAll('.aw-sidebar [data-page]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.page===state.page)));
  q('[data-mobile-nav]').value=state.page;
  q('.aw-top b').textContent=pages[state.page][0];q('.aw-top small').textContent=pages[state.page][1];
+ root.querySelectorAll('.aw-bottom-nav button:not([data-more-toggle])').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mobileAction?state.page==='opportunities'&&state.oppAction===b.dataset.mobileAction:b.dataset.page===state.page)));
+ q('[data-more-toggle]').classList.toggle('aw-nav-selected',!['today','ai','news'].includes(state.page)&&!(state.page==='opportunities'&&state.oppAction==='prepare'));
  const isAI=state.page==='ai';q('.aw-chat').hidden=!isAI;q('.aw-sessions').hidden=!isAI;q('[data-module]').hidden=isAI;q('.aw-body').classList.toggle('aw-module-mode',!isAI);
  if(isAI)return;
  let html='<div class="aw-module-heading"><h2>'+pages[state.page][0]+'</h2>'+badge('虚构案例')+'</div>';
@@ -173,8 +176,8 @@ function render(){
  q('[data-history]').textContent=state.sent?t.title:'暂无历史会话';
  if(!state.sent){q('[data-status]').textContent=t?'任务已载入，点击“查看示例”展示对应预设结果。':'四个场景均可直接体验，客户、商机与业务内容均为虚构。';return;}
  const conversation=q('[data-conversation]');conversation.replaceChildren();
- const message=document.createElement('div');message.className='aw-user-message';message.textContent=t.prompt;
- const answer=document.createElement('article');answer.className='aw-answer';answer.innerHTML='<div class="aw-answer-head"><b>AI 工作台 · '+t.name+'</b></div>'+t.answer;
+ const message=document.createElement('div');message.className='aw-user-message';const promptLabel=document.createElement('b');promptLabel.className='aw-message-label';promptLabel.textContent='你的任务';const promptText=document.createElement('p');promptText.textContent=t.prompt;message.append(promptLabel,promptText);
+ const answer=document.createElement('article');answer.className='aw-answer';answer.innerHTML='<div class="aw-answer-head"><span class="aw-answer-avatar" aria-hidden="true">AI</span><div><b>AI 工作台 · '+t.name+'</b><small>预设结果 · 可查看依据</small></div></div>'+t.answer;
  conversation.append(message,answer);
  if(state.scene==='customer'){
   const form=document.createElement('div');form.className='aw-switch';form.innerHTML='<label for="aw-feedback">补充一条客户反馈</label><select id="aw-feedback" aria-label="客户新反馈"><option value="diagnose">想先核实仓运协同与数据问题，再考虑系统改造。</option><option value="supplier">已有软件供应商，先不讨论更换系统。</option></select><button type="button" data-confirm class="cursor-interaction"></button>';
@@ -190,10 +193,14 @@ function render(){
  const actions=document.createElement('div');actions.className='aw-followups';actions.innerHTML='<button type="button" data-follow="'+t.next+'" class="cursor-interaction">'+t.follow+' →</button><button type="button" data-home class="cursor-interaction">选择其他任务</button>';conversation.append(actions);
  q('[data-status]').textContent='预设结果已展示，可展开依据或继续下一项任务。';
 }
-root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-reset-demo')){state=initialState();render();save();}else if(b.hasAttribute('data-send')){if(!scenes[state.scene])return;state.sent=true;render();}else if(b.dataset.scene){state.page='ai';state.scene=b.dataset.scene;state.sent=false;render();}else if(b.hasAttribute('data-new')){state={...state,scene:null,sent:false,feedback:'diagnose',confirmed:null,rewritten:false};render();}else if(b.dataset.follow){state.scene=b.dataset.follow;state.sent=true;render();}else if(b.hasAttribute('data-home')){state.sent=false;render();}else if(b.hasAttribute('data-confirm')){state.confirmed=state.feedback;render();q('[data-status]').textContent='反馈已确认；商机研判与材料创作将复用这条信息。';}else if(b.hasAttribute('data-rewrite')){state.rewritten=!state.rewritten;render();}else return;save();});
+function closeMore(){q('#aw-more-panel').hidden=true;q('[data-more-toggle]').setAttribute('aria-expanded','false');}
+root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-more-toggle')){const open=q('#aw-more-panel').hidden;q('#aw-more-panel').hidden=!open;b.setAttribute('aria-expanded',String(open));if(open)q('#aw-more-panel [data-page]').focus({preventScroll:true});}if(b.hasAttribute('data-more-close')){closeMore();q('[data-more-toggle]').focus({preventScroll:true});}if(b.dataset.page)closeMore();});
+root.addEventListener('keydown',e=>{if(e.key==='Escape'&&!q('#aw-more-panel').hidden){closeMore();q('[data-more-toggle]').focus({preventScroll:true});}});
+root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-reset-demo')){state=initialState();render();save();}else if(b.hasAttribute('data-send')){if(!scenes[state.scene])return;state.sent=true;render();revealMobile('[data-conversation]');}else if(b.dataset.scene){state.page='ai';state.scene=b.dataset.scene;state.sent=false;render();revealMobile('.aw-composer');}else if(b.hasAttribute('data-new')){state={...state,scene:null,sent:false,feedback:'diagnose',confirmed:null,rewritten:false};render();}else if(b.dataset.follow){state.scene=b.dataset.follow;state.sent=true;render();revealMobile('[data-conversation]');}else if(b.hasAttribute('data-home')){state.sent=false;render();revealMobile('[data-welcome]');}else if(b.hasAttribute('data-confirm')){state.confirmed=state.feedback;render();q('[data-status]').textContent='反馈已确认；商机研判与材料创作将复用这条信息。';}else if(b.hasAttribute('data-rewrite')){state.rewritten=!state.rewritten;render();}else return;save();});
 root.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
 
+ if(b.hasAttribute('data-mobile-action')){closeMore();state.page='opportunities';state.oppAction=b.dataset.mobileAction;state.oppStage=oppStages[pickedOpp().stage];render();save();revealMobile('.aw-op-assistant');return;}
  if(b.hasAttribute('data-open-opp')){state.page='opportunities';state.record=Number(b.dataset.openOpp);state.oppStage=oppStages[pickedOpp().stage];state.oppAction='prepare';render();save();return;}
  if(b.hasAttribute('data-select-opp')){state.record=Number(b.dataset.selectOpp);state.meetingDraft=false;render();save();return;}
  if(b.hasAttribute('data-opp-stage')){state.oppStage=b.dataset.oppStage;if(state.oppStage!=='全部')state.record=opportunities.find(o=>oppStages[o.stage]===state.oppStage).id;render();save();return;}

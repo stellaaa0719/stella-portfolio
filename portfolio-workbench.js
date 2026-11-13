@@ -4,12 +4,14 @@ const frame=document.getElementById('platform-demo-frame');
 if(!frame)return;
 const requestHeight=()=>frame.contentWindow?.postMessage({type:'stella-demo-measure'},location.origin);
 frame.addEventListener('load',requestHeight);
+matchMedia('(max-width:550px)').addEventListener('change',()=>{if(matchMedia('(max-width:550px)').matches)frame.style.removeProperty('height');requestHeight();});
 requestHeight();
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches||document.documentElement.dataset.motion==='off';
 window.addEventListener('message',event=>{
  if(event.source!==frame.contentWindow||event.origin!==location.origin||event.data?.type!=='stella-demo-size')return;
  const height=Number(event.data.height);
  if(!Number.isFinite(height)||height<200||height>5000)return;
+ if(matchMedia('(max-width:550px)').matches){frame.style.removeProperty('height');return;}
  const next=Math.ceil(height);
  if(Math.abs(frame.getBoundingClientRect().height-next)>2)frame.style.height=next+'px';
 });

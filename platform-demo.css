@@ -418,3 +418,69 @@ html,body{margin:0;padding:0;background:#f5f7fa}body{overflow-x:hidden}#actual-a
 #actual-ai-workbench .aw-network-questions ul{padding-left:17px;margin:0;color:#637c94;font-size:11px;line-height:1.8}
 #actual-ai-workbench .aw-network-questions li+li{margin-top:7px}
 #actual-ai-workbench .aw-network-connections{margin-bottom:14px}
+/* Clear conversation zones and mobile app navigation. */
+#actual-ai-workbench .aw-bottom-nav,#actual-ai-workbench .aw-more-panel{display:none}
+#actual-ai-workbench .aw-composer{padding:0;overflow:hidden;border-color:#bfcfe1;box-shadow:0 8px 26px #243f6510;margin-top:24px}
+#actual-ai-workbench .aw-context{margin:0;padding:12px 15px;background:#edf3fa;border-bottom:1px solid #d8e3ef;gap:7px}
+#actual-ai-workbench .aw-context b{font-weight:600;color:#294b70}
+#actual-ai-workbench .aw-context>span:first-child{font-size:10px;color:#617b97}
+#actual-ai-workbench .aw-task-field{padding:14px 15px 10px}
+#actual-ai-workbench .aw-task-field label{font-size:11px;font-weight:600;color:#526e8b;margin-bottom:9px}
+#actual-ai-workbench .aw-task-field textarea{border:1px solid #dce5ef;background:#f8fafc;border-radius:8px;padding:12px;color:#344d67;min-height:90px}
+#actual-ai-workbench .aw-task-field textarea::placeholder{color:#8a9aad}
+#actual-ai-workbench .aw-input-bottom{margin:0;padding:10px 15px 13px;border-top:1px solid #edf1f6;background:#fff}
+#actual-ai-workbench .aw-user-message{background:#eaf2fc;border:1px solid #cbdcf0;border-left:3px solid #7b9cc3;padding:14px 16px;white-space:normal;margin-bottom:15px}
+#actual-ai-workbench .aw-message-label{display:block;font-size:10px;letter-spacing:1px;color:#5c789a;margin-bottom:9px}
+#actual-ai-workbench .aw-user-message p{margin:0;white-space:pre-wrap;font-size:12px;line-height:1.85}
+#actual-ai-workbench .aw-answer{border:1px solid #c9d8e8;border-radius:12px;box-shadow:0 4px 20px #243f6505;padding:18px}
+#actual-ai-workbench .aw-answer-head{padding-bottom:13px;margin-bottom:16px;border-bottom:1px solid #e0e8f1}
+#actual-ai-workbench .aw-answer-head .aw-answer-avatar{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#24476f;color:white;font-size:11px;font-weight:600}
+#actual-ai-workbench .aw-answer-head b{display:block;font-size:12px;font-weight:600}
+#actual-ai-workbench .aw-answer-head small{display:block;font-size:10px;margin-top:2px}
+@media(max-width:550px){
+ html,body{height:100%;overflow:hidden}
+ #actual-ai-workbench{height:100dvh;min-height:0;position:relative;overflow:hidden}
+ #actual-ai-workbench .aw-app{height:100%;display:flex;flex-direction:column;min-height:0;position:relative}
+ #actual-ai-workbench .aw-mobile-nav{display:none}
+ #actual-ai-workbench .aw-top{flex:none;padding:12px 14px;gap:8px;align-items:center;min-height:65px}
+ #actual-ai-workbench .aw-top>div:first-child{min-width:0}
+ #actual-ai-workbench .aw-top b{font-size:15px;font-weight:600}
+ #actual-ai-workbench .aw-top small{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
+ #actual-ai-workbench .aw-header-actions button{font-size:10px;min-height:32px;padding:5px 7px}
+ #actual-ai-workbench .aw-body{flex:1;display:block;overflow-y:auto;overflow-x:hidden;min-height:0;overscroll-behavior-y:auto;scrollbar-width:thin}
+ #actual-ai-workbench .aw-chat{padding:0 14px 18px}
+ #actual-ai-workbench .aw-module{padding:18px 12px;min-height:0}
+ #actual-ai-workbench .aw-welcome{padding-top:24px}
+ #actual-ai-workbench .aw-welcome h2{font-size:23px;font-weight:600}
+ #actual-ai-workbench .aw-welcome>p{font-size:12px;line-height:1.8;margin:0 0 20px}
+ #actual-ai-workbench .aw-scenes{gap:10px}
+ #actual-ai-workbench .aw-scenes button{border-radius:11px;padding:15px 12px;min-height:120px;border-color:#d7e2ef;box-shadow:0 2px 5px #183b6103}
+ #actual-ai-workbench .aw-scenes svg{width:21px;height:21px;margin-bottom:12px}
+ #actual-ai-workbench .aw-scenes b{font-size:13px;font-weight:600}
+ #actual-ai-workbench .aw-scenes span{font-size:11px;line-height:1.7}
+ #actual-ai-workbench .aw-recent{grid-template-columns:1fr;gap:8px;margin:20px 0 4px}
+ #actual-ai-workbench .aw-recent p{margin:5px 0;font-size:11px;padding:11px 12px;border-radius:9px}
+ #actual-ai-workbench .aw-welcome:not([hidden])~.aw-composer{margin-top:20px}
+ #actual-ai-workbench .aw-context{display:block;padding:11px 13px}
+ #actual-ai-workbench .aw-context>span:first-child{display:block;margin-bottom:4px}
+ #actual-ai-workbench .aw-context b{font-size:12px}
+ #actual-ai-workbench .aw-task-field{padding:13px}
+ #actual-ai-workbench .aw-task-field textarea{font-size:14px;line-height:1.85;padding:11px;min-height:100px}
+ #actual-ai-workbench .aw-input-bottom{padding:10px 13px}
+ #actual-ai-workbench .aw-input-bottom>button{min-height:40px;border-radius:8px;font-weight:600}
+ #actual-ai-workbench .aw-status{font-size:10px;line-height:1.8;padding:0 3px}
+ #actual-ai-workbench .aw-conversation{padding-top:18px}
+ #actual-ai-workbench .aw-answer{padding:15px}
+ #actual-ai-workbench .aw-bottom-nav{display:flex;flex:none;align-items:center;justify-content:space-around;background:#fff;border-top:1px solid #d8e2ee;padding:6px 4px max(7px,env(safe-area-inset-bottom));box-shadow:0 -4px 16px #183b6108;z-index:6;gap:2px;min-height:67px}
+ #actual-ai-workbench .aw-bottom-nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;background:transparent;border-radius:9px;padding:5px 1px;min-height:50px;color:#748299;font-size:11px}
+ #actual-ai-workbench .aw-bottom-nav svg{width:21px;height:21px;flex:none}
+ #actual-ai-workbench .aw-bottom-nav [aria-pressed=true],#actual-ai-workbench .aw-bottom-nav .aw-nav-selected{color:#24476f;background:#edf3fa;font-weight:600}
+ #actual-ai-workbench .aw-bottom-nav .aw-nav-ai svg{box-sizing:content-box;background:#24476f;color:#fff;padding:9px;border-radius:50%;width:20px;height:20px;margin-top:-15px;box-shadow:0 3px 9px #24476f22}
+ #actual-ai-workbench .aw-more-panel{display:block;position:absolute;bottom:calc(68px + env(safe-area-inset-bottom));left:10px;right:10px;background:#fff;border:1px solid #d4dfec;border-radius:15px;padding:16px;box-shadow:0 -8px 35px #213d6a20;z-index:7;max-height:calc(100% - 150px);overflow:auto}
+ #actual-ai-workbench .aw-more-panel>div:first-child{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px;color:#28496b}
+ #actual-ai-workbench .aw-more-panel>div:first-child button{border:0;min-width:36px;font-size:16px}
+ #actual-ai-workbench .aw-more-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+ #actual-ai-workbench .aw-more-grid button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:14px 5px;font-size:11px;background:#f6f9fc;border-color:#e1e8f1;min-height:80px}
+ #actual-ai-workbench .aw-more-grid svg{width:23px;height:23px;color:#456c94}
+ #actual-ai-workbench .aw-more-panel>p{font-size:10px;color:#8b99aa;text-align:center;margin:14px 0 0}
+}
