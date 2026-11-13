@@ -46,6 +46,29 @@ def version_html(root: Path, fingerprint_files: bool = False) -> None:
             html.write_text(result, encoding='utf-8')
 
 
+    # Version the embedded HTML after its JS/CSS references have been updated.
+    # Its digest changes whenever the demo document or referenced assets change.
+    demo = root / 'platform-demo.html'
+    if demo.is_file():
+        digest = hashlib.sha256(demo.read_bytes()).hexdigest()[:12]
+
+        def replace_demo_url(match):
+            original = match.group('value')
+            url = urlsplit(original)
+            if url.scheme or url.netloc or url.path != 'platform-demo.html':
+                return match.group(0)
+            query = [(k, v) for k, v in parse_qsl(url.query) if k != 'v']
+            query.append(('v', digest))
+            value = urlunsplit(('', '', url.path, urlencode(query), url.fragment))
+            return f'{match.group("name")}="{value}"'
+
+        for html in root.glob('*.html'):
+            source = html.read_text(encoding='utf-8')
+            result = re.sub(r'(?P<name>src|href)="(?P<value>[^"]+)"', replace_demo_url, source)
+            if result != source:
+                html.write_text(result, encoding='utf-8')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('root', type=Path)
